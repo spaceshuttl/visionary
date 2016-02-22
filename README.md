@@ -27,7 +27,7 @@ or
 
 `python2 -m pip install visionarypm`
 
-####Use:
+####Then:
 
 ```
 ~ » visionarypm
@@ -48,6 +48,6 @@ Your password: 226ee1bddf2cfb0b805a0ebaa185f2ec3092937919fd76e3bc1ff22abecb9f61
 
 ###Screenshot:
 
-![Screenshot](https://github.com/libeclipse/visionary/blob/master/screenshot.png "Screenshot")
+![Screenshot](https://github.com/libeclipse/visionary/blob/master/images/screenshot.png "Screenshot")
 
 **Support development by donating ฿itcoins: 1ECLipSrTyitXJbeNBZVRMcRHp94HryZkj**
