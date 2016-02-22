@@ -46,11 +46,9 @@ def main():
         else:
             print 'Passwords don\'t match!\n'
             main()
-            raise SystemExit
     else:
         print '%s\n' % (strong_enough)
-        main()
-        raise SystemExit        
+        main()        
  
 if __name__ == "__main__":
     try:
