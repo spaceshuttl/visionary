@@ -25,3 +25,5 @@ There are a few problems with this approach:
 ###Screenshot:
 
 ![Screenshot](https://github.com/libeclipse/visionary/blob/master/screenshot.png "Screenshot")
+
+Support development by donating BTC: 1ECLipSrTyitXJbeNBZVRMcRHp94HryZkj
