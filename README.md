@@ -19,7 +19,32 @@ There are a few problems with this approach:
 
 ##Usage:
 
-`./visionary.py`
+####Install:
+
+`pip2 install visionarypm`
+
+or
+
+`python2 -m pip install visionarypm`
+
+####Use:
+
+```
+~ » visionarypm
+
+                      _     _                              
+               /\   /(_)___(_) ___  _ __   __ _ _ __ _   _ 
+               \ \ / / / __| |/ _ \| '_ \ / _` | '__| | | |
+                \ V /| \__ \ | (_) | | | | (_| | |  | |_| |
+                 \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
+                                     Password Manager|___/ 
+
+Master password: 
+Re-enter master password: 
+Keyword: github.com
+
+Your password: 226ee1bddf2cfb0b805a0ebaa185f2ec3092937919fd76e3bc1ff22abecb9f61
+```
 
 ###Screenshot:
 
