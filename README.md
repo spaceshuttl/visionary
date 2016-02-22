@@ -26,4 +26,4 @@ There are a few problems with this approach:
 
 ![Screenshot](https://github.com/libeclipse/visionary/blob/master/screenshot.png "Screenshot")
 
-Support development by donating ฿: 1ECLipSrTyitXJbeNBZVRMcRHp94HryZkj
+Support development by donating ฿itcoins: 1ECLipSrTyitXJbeNBZVRMcRHp94HryZkj
