@@ -19,9 +19,9 @@ def sha256(s):
     
 def generate(master_password, keyword):
     password = sha256(sha256(master_password)+sha256(keyword))
-    for iteration in range(100000):
+    for iteration in range(200000):
         password = sha256(password)
-    return password  
+    return password[0:32]
 
 def strong(password):
     if len(password) >= 14:
@@ -39,17 +39,11 @@ def main(first_run=True):
     if first_run == True:
         print '%s\n' % (banner())
     master_password = getpass('Master password: ')
-    strong_enough = strong(master_password)
-    if strong_enough == True:
-        reenter_master_password = getpass('Re-enter master password: ')
-        if master_password == reenter_master_password:
-            keyword = raw_input('Keyword: ')
-            print '\nYour password: %s' % (generate(master_password, keyword)[0:32])
-        else:
-            print 'Passwords don\'t match!\n'
-            main(False)
+    if strong(master_password):
+        keyword = raw_input('Keyword: ')
+        print '\nYour password: %s' % (generate(master_password, keyword))
     else:
-        print '%s\n' % (strong_enough)
+        print '%s\n' % (strong(master_password))
         main(False)        
  
 if __name__ == "__main__":
