@@ -44,7 +44,7 @@ def main(first_run=True):
         reenter_master_password = getpass('Re-enter master password: ')
         if master_password == reenter_master_password:
             keyword = raw_input('Keyword: ')
-            print '\nYour password: %s' % (generate(master_password, keyword))
+            print '\nYour password: %s' % (generate(master_password, keyword)[0:32])
         else:
             print 'Passwords don\'t match!\n'
             main(False)
