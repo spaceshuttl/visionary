@@ -23,26 +23,26 @@ There are a few problems with this approach:
 
 **Install using pip in order to get the latest stable release.**
 
-`~ » pip2 install visionarypm`
+▶ pip2 install visionarypm`
 
 or
 
-`~ » python2 -m pip install visionarypm`
+▶ python2 -m pip install visionarypm`
 
 ###Option 2: git clone
 
 **Install using git to be at the bleeding edge. You'll receive the latest commit.**
 
 ```
-~ » git clone https://github.com/libeclipse/visionary.git
-~ » cd visionary
-~ » python2 setup.py install
+▶ git clone https://github.com/libeclipse/visionary.git
+▶ cd visionary
+▶ python2 setup.py install
 ```
 
 ##Usage:
 
 ```
-~ » visionarypm
+▶ visionarypm
 
                       _     _                              
                /\   /(_)___(_) ___  _ __   __ _ _ __ _   _ 
@@ -54,7 +54,7 @@ or
 Master password: 
 Keyword: github.com
 
-Your password: 226ee1bddf2cfb0b805a0ebaa185f2ec3092937919fd76e3bc1ff22abecb9f61
+Your password: 8c71d4aa138a3be6bb337e9f47d22cfa
 ```
 
 ###Screenshot:
