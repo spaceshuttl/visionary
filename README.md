@@ -17,15 +17,27 @@ There are a few problems with this approach:
 
 ###NOT YET READY FOR USE!
 
-##Usage:
+##Installation:
 
-####Install:
+###Option 1: pip
 
-`pip2 install visionarypm`
+**Install using pip in order to get the latest stable release.**
 
-or
+```
+pip2 install visionarypm
 
-`python2 -m pip install visionarypm`
+python2 -m pip install visionarypm
+```
+
+###Option 2: git clone
+
+**Install using git to be at the bleeding edge. You'll receive the latest commit.**
+
+```
+git clone https://github.com/libeclipse/visionary.git
+cd visionary
+python2 setup.py install
+```
 
 ####Then:
 
@@ -40,7 +52,6 @@ or
                                      Password Manager|___/ 
 
 Master password: 
-Re-enter master password: 
 Keyword: github.com
 
 Your password: 226ee1bddf2cfb0b805a0ebaa185f2ec3092937919fd76e3bc1ff22abecb9f61
