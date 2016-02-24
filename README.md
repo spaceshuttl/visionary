@@ -39,7 +39,7 @@ cd visionary
 python2 setup.py install
 ```
 
-###Usage:
+##Usage:
 
 ```
 ~ » visionarypm
