@@ -23,11 +23,11 @@ There are a few problems with this approach:
 
 **Install using pip in order to get the latest stable release.**
 
-```
-pip2 install visionarypm
+`pip2 install visionarypm`
 
-python2 -m pip install visionarypm
-```
+or
+
+`python2 -m pip install visionarypm`
 
 ###Option 2: git clone
 
