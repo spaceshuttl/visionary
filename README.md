@@ -12,8 +12,8 @@ There are a few problems with this approach:
 
 1. Your passwords are generated on-the-fly based on a pure algorithm. This means that the only thing that would make you lose your data is you forgetting your master password.
 2. Nothing is stored so there's nothing to steal.
-3. There are thousands of iterations, which makes brute-forcing infeasible.
-4. No need to sync data, as there's nothing to sync! You can use this script or our API *(coming soon)* from anywhere in the world, and from any device, to generate your passwords.
+3. There are thousands of iterations of Scrypt, making brute-forcing infeasible.
+4. No need to sync data, as there's nothing to sync! You can use this script or our API **(coming soon)** from anywhere in the world, and from any device, to generate your passwords.
 
 ###NOT YET READY FOR USE!
 
