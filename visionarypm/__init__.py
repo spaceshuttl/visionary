@@ -48,7 +48,6 @@ def main(first_run=True):
  
 if __name__ == "__main__":
     try:
-        print '%s\n' % (banner())
         main()
     except KeyboardInterrupt:
         print '\nKeyboard Interrupt.'
