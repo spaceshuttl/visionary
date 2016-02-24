@@ -47,7 +47,7 @@ def main(first_run=True):
         keyword = raw_input('Keyword: ')
         print '\nYour password: %s' % (generate(master_password, keyword))
     else:
-        print '%s\n' % (strong(master_password))
+        print '%s' % (strong(master_password))
         main(False)        
  
 if __name__ == "__main__":
