@@ -1,0 +1,9 @@
+setup.py
+visionarypm/__init__.py
+visionarypm.egg-info/PKG-INFO
+visionarypm.egg-info/SOURCES.txt
+visionarypm.egg-info/dependency_links.txt
+visionarypm.egg-info/entry_points.txt
+visionarypm.egg-info/not-zip-safe
+visionarypm.egg-info/requires.txt
+visionarypm.egg-info/top_level.txt
