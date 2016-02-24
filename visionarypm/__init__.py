@@ -1,6 +1,5 @@
 #!/usr/bin/python2
 
-import hashlib
 import re
 from getpass import getpass
 import pyscrypt
@@ -14,10 +13,7 @@ def banner():
                  \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
                                      Password Manager|___/ """
 
-def sha256(s):
-    return hashlib.sha256(s).hexdigest()
-
-    
+   
 def generate(master_password, keyword):
     hashed = pyscrypt.hash(password = master_password, 
                            salt = keyword, 
@@ -47,7 +43,7 @@ def main(first_run=True):
         keyword = raw_input('Keyword: ')
         print '\nYour password: %s' % (generate(master_password, keyword))
     else:
-        print '%s' % (strong(master_password))
+        print '%s\n' % (strong(master_password))
         main(False)        
  
 if __name__ == "__main__":
