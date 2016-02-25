@@ -23,13 +23,15 @@ def generate(master_password, keyword):
     return hashed.encode('hex')[0:32]
 
 def main(first_run=True):
-    if first_run == True:
+    if first_run == True: #only print banner on first main() call
         print '%s\n' % (banner())
     master_password = getpass('Master password: ')
     if len(master_password) >= 8:
         print '' #line break for formatting
         while True:
             keyword = raw_input('Keyword: ')
+            if not keyword: #No keyword specified exits program cleanly
+                break
             print 'Your password: %s\n' % (generate(master_password, keyword))
     else:
         print 'Password must be at least 8 characters.\n'
