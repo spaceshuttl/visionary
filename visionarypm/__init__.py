@@ -27,9 +27,10 @@ def main(first_run=True):
         print '%s\n' % (banner())
     master_password = getpass('Master password: ')
     if len(master_password) >= 8:
+        print '' #line break for formatting
         while True:
             keyword = raw_input('Keyword: ')
-            print '\nYour password: %s' % (generate(master_password, keyword))
+            print 'Your password: %s\n' % (generate(master_password, keyword))
     else:
         print 'Password must be at least 8 characters.\n'
         main(False)        
