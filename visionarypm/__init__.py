@@ -1,6 +1,5 @@
 #!/usr/bin/python2
 
-import re
 from getpass import getpass
 import pyscrypt
 
@@ -23,27 +22,15 @@ def generate(master_password, keyword):
                            dkLen = 32)
     return hashed.encode('hex')[0:32]
 
-def strong(password):
-    if len(password) >= 12:
-        if re.search(r'\d', password):
-            if re.search(r'[A-Z]', password) and re.search(r'[a-z]', password):
-                return True
-            else:
-                return 'Password must be a mix of uppercase and lowercase characters.'
-        else:
-            return 'Password must contain digits.'
-    else:
-        return 'Password must be at least 12 characters long.'
-
 def main(first_run=True):
     if first_run == True:
         print '%s\n' % (banner())
     master_password = getpass('Master password: ')
-    if strong(master_password) == True:
+    if len(master_password) >= 8:
         keyword = raw_input('Keyword: ')
         print '\nYour password: %s' % (generate(master_password, keyword))
     else:
-        print '%s\n' % (strong(master_password))
+        print 'Password must be at least 8 characters.\n'
         main(False)        
  
 if __name__ == "__main__":
