@@ -19,15 +19,17 @@ There are a few problems with this approach:
 
 ##Installation:
 
+####*Compatable with Python2 only*
+
 ###Option 1: pip
 
 **Install using pip in order to get the latest stable release.**
 
-`~ >> pip2 install visionarypm`
+`~ >> pip install visionarypm`
 
 or
 
-`~ >> python2 -m pip install visionarypm`
+`~ >> python -m pip install visionarypm`
 
 ###Option 2: git clone
 
@@ -40,8 +42,6 @@ or
 ```
 
 ##Usage:
-
-####*Compatable with Python2 only*
 
 Just run:
 
