@@ -38,7 +38,7 @@ or
 ```
 ~ >> git clone https://github.com/libeclipse/visionary.git
 ~ >> cd visionary
-~ >> python2 setup.py install
+~ >> python setup.py install
 ```
 
 ##Usage:
