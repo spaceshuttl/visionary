@@ -41,21 +41,15 @@ or
 
 ##Usage:
 
-```
-~ >> visionarypm
+####*Compatable with Python2 only*
 
-                      _     _                              
-               /\   /(_)___(_) ___  _ __   __ _ _ __ _   _ 
-               \ \ / / / __| |/ _ \| '_ \ / _` | '__| | | |
-                \ V /| \__ \ | (_) | | | | (_| | |  | |_| |
-                 \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
-                                     Password Manager|___/ 
+Just run:
 
-Master password: 
-Keyword: github.com
+`~ >> visionarypm`
 
-Your password: 8c71d4aa138a3be6bb337e9f47d22cfa
-```
+in your command line. You will be prompted for a master password (minimum 8 characters). This is what protects all of your generated passwords so make it a strong one. Next, you'll be prompted for a keyword. This can be anything, like 'github.com' or 'facebook' or even 'not_porn' for that special folder.
+
+A 32 character password will be generated based on what you entered. You'll then be prompted for another keyword to optionally generate another password. Leave it blank to exit.
 
 ###Screenshot:
 
