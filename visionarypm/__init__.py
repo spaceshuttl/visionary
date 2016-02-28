@@ -16,7 +16,7 @@ def banner():
 def generate(master_password, keyword):
     hashed = pyscrypt.hash(password = master_password, 
                            salt = keyword, 
-                           N = 4096,
+                           N = 2048,
                            r = 1,
                            p = 1,
                            dkLen = 32)
