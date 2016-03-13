@@ -22,6 +22,13 @@ def generate(master_password, keyword):
                            dkLen = 32)
     return hashed.encode('hex')[0:32]
 
+def get_keyword():
+    try:
+        return raw_input('Keyword: ')
+    except EOFError:
+        print 'Keyword unusable.\n'
+        return get_keyword()
+
 def main(first_run=True):
     if first_run == True:
         print '%s\n' % (banner())
@@ -29,14 +36,15 @@ def main(first_run=True):
     if len(master_password) >= 8:
         print '' #line break for formatting
         while True:
-            keyword = raw_input('Keyword: ')
-            if not keyword: #No keyword specified exits program cleanly
+            keyword = get_keyword()
+            if keyword:
+                print 'Your password: %s\n' % (generate(master_password, keyword))
+            else:
                 print '\nExiting...'
-                break
-            print 'Your password: %s\n' % (generate(master_password, keyword))
+                raise SystemExit
     else:
         print 'Password must be at least 8 characters.\n'
-        main(False)        
+        main(False) 
  
 if __name__ == "__main__":
     try:
