@@ -28,6 +28,10 @@ def get_keyword():
     except EOFError:
         print 'Keyword unusable.\n'
         return get_keyword()
+    except KeyboardInterrupt:
+        print '\nKeyboard Interrupt.'
+        print '\nExiting...'
+        raise SystemExit
 
 def main(first_run=True):
     if first_run == True:
@@ -51,3 +55,4 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print '\nKeyboard Interrupt.'
+        print '\nExiting...'
