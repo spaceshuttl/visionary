@@ -49,7 +49,7 @@ in your command line. You will be prompted for a master password (minimum 8 char
 
 A 32 character password will be generated based on what you entered. You'll then be prompted for another keyword to optionally generate another password. Leave it blank to exit.
 
-You can also import visionarypm into your scripts:
+It's also possible to import visionarypm into your own scripts:
 
 ```
 import visionarypm
@@ -57,7 +57,7 @@ import visionarypm
 my_password = visionarypm.generate('master_password', 'keyword')
 ```
 
-You can also specify the CPU/Memory cost parameter, and the generated password's length:
+And even specify the CPU/Memory cost parameter and the generated password's length:
 
 `my_password = visionarypm.generate('master_password', 'keyword', cost=4096, oLen=48)`
 
