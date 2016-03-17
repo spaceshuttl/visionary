@@ -49,6 +49,14 @@ in your command line. You will be prompted for a master password (minimum 8 char
 
 A 32 character password will be generated based on what you entered. You'll then be prompted for another keyword to optionally generate another password. Leave it blank to exit.
 
+You can also import visionarypm into your scripts:
+
+```
+import visionarypm
+
+my_password = visionarypm.generate('master_password', 'keyword')
+```
+
 ###Screenshot:
 
 ![Screenshot](https://github.com/libeclipse/visionary/blob/master/images/screenshot.png "Screenshot")
