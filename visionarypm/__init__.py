@@ -33,7 +33,7 @@ def get_keyword():
         print '\nExiting...'
         raise SystemExit
 
-def main(first_run=True):
+def main(first_run=False):
     if first_run == True:
         print '%s\n' % (banner())
     master_password = getpass('Master password: ')
@@ -48,11 +48,11 @@ def main(first_run=True):
                 raise SystemExit
     else:
         print 'Password must be at least 8 characters.\n'
-        main(False) 
+        main() 
  
 if __name__ == "__main__":
     try:
-        main()
+        main(True)
     except KeyboardInterrupt:
         print '\nKeyboard Interrupt.'
         print '\nExiting...'
