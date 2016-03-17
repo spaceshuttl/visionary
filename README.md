@@ -57,6 +57,12 @@ import visionarypm
 my_password = visionarypm.generate('master_password', 'keyword')
 ```
 
+You can also specify the CPU/Memory cost parameter, and the generated password's length:
+
+`my_password = visionarypm.generate('master_password', 'keyword', cost=4096, oLen=48)`
+
+The defaults are 2048 and 32, respectively. The maximum password length is 64 characters.
+
 ###Screenshot:
 
 ![Screenshot](https://github.com/libeclipse/visionary/blob/master/images/screenshot.png "Screenshot")
