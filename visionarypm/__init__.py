@@ -13,14 +13,16 @@ def banner():
                                      Password Manager|___/ """
 
    
-def generate(master_password, keyword, N=2048, r=1, p=1, dkLen=32):
-    hashed = pyscrypt.hash(password = master_password, 
-                           salt = keyword, 
-                           N = N,
-                           r = r,
-                           p = p,
-                           dkLen = dkLen)
-    return hashed.encode('hex')[0:32]
+def generate(master_password, keyword, cost=2048, oLen=32):
+    hashed = pyscrypt.hash (
+        password = master_password, 
+        salt = keyword, 
+        N = cost,
+        r = 1,
+        p = 1,
+        dkLen = 32
+    )
+    generated = hashed.encode('hex')[0:oLen]
 
 def get_keyword():
     try:
