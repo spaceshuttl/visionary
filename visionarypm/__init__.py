@@ -76,7 +76,14 @@ def getConfig():
         print 'in %s\n' % (sys.path[0] + '/visionarypm.conf')
         return config
 
-def main(params):
+# Global parameters
+params = {}
+
+def main(first_run=True):
+    if first_run ==  True:
+        print '%s\n' % (banner())
+        global params
+        params = getConfig()
     try:
         master_password = getpass('Master password: ')
     except KeyboardInterrupt:
@@ -93,11 +100,10 @@ def main(params):
                 raise SystemExit
     else:
         print 'Password must be at least 8 characters.\n'
-        main(params) 
+        main(False) 
  
 if __name__ == "__main__":
     try:
-        print '%s\n' % (banner())
-        main(getConfig())
+        main()
     except KeyboardInterrupt:
         print '\nKeyboard Interrupt.\n\nExiting...'
