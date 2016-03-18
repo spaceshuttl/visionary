@@ -69,6 +69,22 @@ The defaults are 2048 and 32, respectively. The maximum password length is 64 ch
 
 ![Screenshot](https://github.com/libeclipse/visionary/blob/master/images/screenshot.png "Screenshot")
 
+###Troubleshooting:
+
+**"I reinstalled Visionary and I want to change my default configuration."**
+
+You should look inside the folder where Visionary is installed for a file called `visionarypm.conf`. Simply delete it and you should be prompted for a new configuration on the next run.
+
+**"I have forgotton my configuration settings! Help!"**
+
+If the configuration file has been deleted, then you'll have to guess. Luckily, there's not too many possible configurations.
+
+Possible cost factors are `1024, 2048, 4096, 8192, 16384`, and the possible password lengths are 16-64 inclusive.
+
+**"I have forgotton my password and/or keyword! Help!**
+
+If you've forgotton your password, then you're pretty much screwed. When it comes to keywords, they're usually easy to guess. Most people use the website link or maybe something that reminds them of it.
+
 [![forthebadge](http://forthebadge.com/images/badges/built-with-swag.svg)](http://forthebadge.com)
 
 **Support development by donating ฿itcoins: 1ECLipSrTyitXJbeNBZVRMcRHp94HryZkj**
