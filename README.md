@@ -89,4 +89,4 @@ If you've forgotton your password, then you're pretty much screwed. When it come
 
 **Support development by donating ฿itcoins: 1ECLipSrTyitXJbeNBZVRMcRHp94HryZkj**
 
-*"You store your passwords in plaintext?! Na mate, it's double ROT13 encryption.*
+*"You store your passwords in plaintext?! Na mate, it's double ROT13 encryption."*
