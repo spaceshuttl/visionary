@@ -7,12 +7,12 @@ import sys
 
 def banner():
     return """
-               _     _                              
-        /\   /(_)___(_) ___  _ __   __ _ _ __ _   _ 
-        \ \ / / / __| |/ _ \| '_ \ / _` | '__| | | |
-         \ V /| \__ \ | (_) | | | | (_| | |  | |_| |
-          \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
-                              Password Manager|___/ 
+                          _     _                              
+                   /\   /(_)___(_) ___  _ __   __ _ _ __ _   _ 
+                   \ \ / / / __| |/ _ \| '_ \ / _` | '__| | | |
+                    \ V /| \__ \ | (_) | | | | (_| | |  | |_| |
+                     \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
+                                         Password Manager|___/ 
     """
    
 def generate(master_password, keyword, cost=2048, oLen=32):
@@ -79,7 +79,7 @@ def getConfig():
 def main(first_run=True):
     if first_run == True:
         print '%s\n' % (banner())
-    params = getConfig()
+        params = getConfig()
     try: # Sometimes the installed version doesn't exit properly.
         master_password = getpass('Master password: ')
     except KeyboardInterrupt:
