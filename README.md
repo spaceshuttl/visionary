@@ -45,9 +45,11 @@ Just run:
 
 `~ >> visionarypm`
 
-in your command line. You will be prompted for a master password (minimum 8 characters). This is what protects all of your generated passwords so make it a strong one. Next, you'll be prompted for a keyword. This can be anything, like 'github.com' or 'facebook' or even 'not_porn' for that special folder.
+in your command line. On your first run, you'll be prompted to enter your default settings (leave blank to accept defaults). A string will be generated that you can save to the specified location. This will remove the need to remember and enter your configuration every time. **Note that different values here will generate different passwords.**
 
-A 32 character password will be generated based on what you entered. You'll then be prompted for another keyword to optionally generate another password. Leave it blank to exit.
+You will be then be prompted for a master password (minimum 8 characters). This is what protects all of your generated passwords so make it a strong one. Next, a keyword. This can be anything, like 'github.com' or 'facebook' or even 'not_porn' for that special folder.
+
+A strong password will be generated based on what you entered (depending on your configuration). Visionary will carry on asking for more keywords, so just leave it blank to exit.
 
 It's also possible to import visionarypm into your own scripts:
 

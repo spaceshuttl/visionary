@@ -37,6 +37,7 @@ def safe_input(string):
         raise SystemExit
 
 def get_defaults():
+    print 'Enter your preferred settings: (leave blank to accept defaults)\n'
     cost = safe_input('CPU/memory cost parameter [default=2048]: ')
     if cost:
         if cost.isdigit():
