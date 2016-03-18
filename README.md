@@ -17,7 +17,7 @@ There are a few problems with this approach:
 
 ##Installation:
 
-####*Compatable with Python2 only*
+####*Compatable with Python2 only, and optimised for Linux*.
 
 ###Option 1: pip
 
