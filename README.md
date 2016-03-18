@@ -88,3 +88,5 @@ If you've forgotton your password, then you're pretty much screwed. When it come
 [![forthebadge](http://forthebadge.com/images/badges/built-with-swag.svg)](http://forthebadge.com)
 
 **Support development by donating ฿itcoins: 1ECLipSrTyitXJbeNBZVRMcRHp94HryZkj**
+
+*"You store your passwords in plaintext?! Na mate, it's double ROT13 encryption.*
