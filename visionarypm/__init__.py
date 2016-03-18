@@ -3,7 +3,7 @@
 from getpass import getpass
 import pyscrypt
 import json
-import sys
+import os
 
 def banner():
     return """
@@ -64,16 +64,24 @@ def get_defaults():
         oLen = 32
     print '' #line break for formatting
     return {"cost" : cost, "oLen" : oLen}
+    
+def getPath():
+    try:
+        return os.path.dirname(os.path.abspath(__file__))
+    except:
+        print '\nCannot get path. Are you sure you\'re not running Visionary from IDLE?'
+        raise SystemExit
 
 def getConfig():    
+    path = getPath()
     try:
-        with open(sys.path[0] + '/visionarypm.conf') as f:
+        with open(path + '/visionarypm.conf') as f:
             config = json.loads(f.read())
         return config
     except IOError:
         config = get_defaults()
         print 'In order to save these settings, place %s' % json.dumps(config)
-        print 'in %s\n' % (sys.path[0] + '/visionarypm.conf')
+        print 'in %s\n' % (path + '/visionarypm.conf')
         return config
 
 # Global parameters
