@@ -3,16 +3,17 @@
 from getpass import getpass
 import pyscrypt
 import json
+import sys
 
 def banner():
     return """
-                      _     _                              
-               /\   /(_)___(_) ___  _ __   __ _ _ __ _   _ 
-               \ \ / / / __| |/ _ \| '_ \ / _` | '__| | | |
-                \ V /| \__ \ | (_) | | | | (_| | |  | |_| |
-                 \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
-                                     Password Manager|___/ """
-
+               _     _                              
+        /\   /(_)___(_) ___  _ __   __ _ _ __ _   _ 
+        \ \ / / / __| |/ _ \| '_ \ / _` | '__| | | |
+         \ V /| \__ \ | (_) | | | | (_| | |  | |_| |
+          \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
+                              Password Manager|___/ 
+    """
    
 def generate(master_password, keyword, cost=2048, oLen=32):
     hashed = pyscrypt.hash (
@@ -23,63 +24,81 @@ def generate(master_password, keyword, cost=2048, oLen=32):
         p = 1,
         dkLen = 32
     )
-    generated = hashed.encode('hex')[0:oLen]
+    return hashed.encode('hex')[0:oLen]
 
-def get_keyword():
+def safe_input(string):
     try:
-        return raw_input('Keyword: ')
+        return raw_input(string)
     except EOFError:
-        print 'Keyword unusable.\n'
-        return get_keyword()
+        print 'Input unusable.\n'
+        return safe_input(string)
     except KeyboardInterrupt:
-        print '\nKeyboard Interrupt.'
-        print '\nExiting...'
+        print '\nKeyboard Interrupt.\n\nExiting...'
         raise SystemExit
 
-def init_defaults():
-    cost = raw_input('CPU/memory cost parameter (default=2048): ')
+def get_defaults():
+    cost = safe_input('CPU/memory cost parameter [default=2048]: ')
     if cost:
-        if cost > 0 and not (num & (num - 1)):
-            if cost <= 16384:
-                pass
-            else:
-                print 'Cost must be below ' #TODO
+        if cost.isdigit():
+            cost = int(cost)
+            if (cost & (cost - 1)) or (cost > 16384 or cost < 1024):
+                print 'Input must be a positive power of 2 between 1024 and 16384.\n'
+                return get_defaults()
+        else:
+            print 'Input must be a positive power of 2 between 1024 and 16384.\n'
+            return get_defaults()
     else:
         cost = 2048
+    oLen = safe_input('Length of generated passwords [default=32]: ')
+    if oLen:
+        if oLen.isdigit():
+            oLen = int(oLen)
+            if oLen > 64 or oLen < 16:
+                print 'Input must be a positive integer between 16 and 64.\n'
+                return get_defaults()
+        else:
+            print 'Input must be a positive integer between 16 and 64.\n'
+            return get_defaults()
+    else:
+        oLen = 32
+    print '' #line break for formatting
+    return {"cost" : cost, "oLen" : oLen}
 
-def setup():
+def getConfig():    
     try:
-        with open('visionarypm.conf') as f:
+        with open(sys.path[0] + '/visionarypm.conf') as f:
             config = json.loads(f.read())
-        return {
-            cost : config['cost'],
-            oLen : config['oLen']
-        }
+        return config
     except IOError:
-        f = open('visionarypm.conf', 'a+')
-        
+        config = get_defaults()
+        print 'In order to save these settings, place %s' % json.dumps(config)
+        print 'in %s\n' % (sys.path[0] + '/visionarypm.conf')
+        return config
 
-def main(first_run=False):
+def main(first_run=True):
     if first_run == True:
         print '%s\n' % (banner())
-    #parameters = setup() # Not enabled for now.
-    master_password = getpass('Master password: ')
+    params = getConfig()
+    try: # Sometimes the installed version doesn't exit properly.
+        master_password = getpass('Master password: ')
+    except KeyboardInterrupt:
+        print '\nKeyboard Interrupt.\n\nExiting...'
+        raise SystemExit
     if len(master_password) >= 8:
         print '' #line break for formatting
         while True:
-            keyword = get_keyword()
+            keyword = safe_input('Keyword: ')
             if keyword:
-                print 'Your password: %s\n' % (generate(master_password, keyword))
+                print 'Your password: %s\n' % (generate(master_password, keyword, params['cost'], params['oLen']))
             else:
                 print '\nExiting...'
                 raise SystemExit
     else:
         print 'Password must be at least 8 characters.\n'
-        main() 
+        main(False) 
  
 if __name__ == "__main__":
     try:
-        main(True)
+        main()
     except KeyboardInterrupt:
-        print '\nKeyboard Interrupt.'
-        print '\nExiting...'
+        print '\nKeyboard Interrupt.\n\nExiting...'
