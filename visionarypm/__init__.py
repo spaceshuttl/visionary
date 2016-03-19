@@ -76,7 +76,7 @@ def getConfig():
     path = getPath()
     try:
         with open(path + '/visionarypm.conf') as f:
-            config = json.loads(f.read())
+            config = json.loads(f.read().strip())
         return config
     except IOError:
         config = get_defaults()
