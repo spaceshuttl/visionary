@@ -1,5 +1,7 @@
 # Visionary Password Manager
 
+[![Build Status](https://drone.io/github.com/libeclipse/visionary/status.png)](https://drone.io/github.com/libeclipse/visionary/latest)
+
 Conventional password managers have many flaws. They work by generating passwords, encrypting them with a master password, and then storing or syncing the encrypted passwords somewhere.
 
 There are a few problems with this approach:
