@@ -87,7 +87,7 @@ If you've forgotton your password, then you're pretty much screwed. When it come
 
 **"The `visionarypm` command doesn't work for me."**
 
-Make sure Python is in properly configured and in your PATH. [How2](http://lmgtfy.com/?q=add+python+to+path)
+Make sure Python is properly configured and in your PATH. [How2](http://lmgtfy.com/?q=add+python+to+path)
 
 [![forthebadge](http://forthebadge.com/images/badges/built-with-swag.svg)](http://forthebadge.com)
 
