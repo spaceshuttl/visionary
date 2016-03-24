@@ -67,31 +67,33 @@ def get_defaults():
     
 def getPath():
     try:
-        return os.path.dirname(os.path.abspath(__file__))
+        return '%s/visionarypm.conf' % os.path.dirname(os.path.abspath(__file__))
     except:
         print '\nCannot get path. Are you sure you\'re not running Visionary from IDLE?'
         raise SystemExit
 
-def getConfig():    
-    path = getPath()
+def getConfig():
     try:
-        with open(path + '/visionarypm.conf') as f:
+        with open(path) as f:
             config = json.loads(f.read().strip())
-        return config
+        return config, 0
     except IOError:
         config = get_defaults()
         print 'In order to save these settings, place %s' % json.dumps(config)
-        print 'in %s\n' % (path + '/visionarypm.conf')
-        return config
+        print 'in %s\n' % (path)
+        return config, 1
 
 # Global parameters
 params = {}
+path = getPath()
 
 def main(first_run=True):
-    if first_run ==  True:
+    if first_run == True:
         print '%s\n' % (banner())
         global params
-        params = getConfig()
+        params, stat = getConfig()
+        if stat == 0:
+            print '[+] Cost factor: %s\n[+] Password length: %s\n[+] Config file: %s\n' % (params['cost'], params['oLen'], path)
     try:
         master_password = getpass('Master password: ')
     except KeyboardInterrupt:
