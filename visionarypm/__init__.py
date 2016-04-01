@@ -7,18 +7,18 @@ import os
 
 def banner():
     return """
-                          _     _                              
-                   /\   /(_)___(_) ___  _ __   __ _ _ __ _   _ 
+                          _     _
+                   /\   /(_)___(_) ___  _ __   __ _ _ __ _   _
                    \ \ / / / __| |/ _ \| '_ \ / _` | '__| | | |
                     \ V /| \__ \ | (_) | | | | (_| | |  | |_| |
                      \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
-                                         Password Manager|___/ 
+                                         Password Manager|___/
     """
-   
+
 def generate(master_password, keyword, cost=2048, oLen=32):
     hashed = pyscrypt.hash (
-        password = master_password, 
-        salt = keyword, 
+        password = master_password,
+        salt = keyword,
         N = cost,
         r = 1,
         p = 1,
@@ -32,9 +32,6 @@ def safe_input(string):
     except EOFError:
         print 'Input unusable.\n'
         return safe_input(string)
-    except KeyboardInterrupt:
-        print '\nKeyboard Interrupt.\n\nExiting...'
-        raise SystemExit
 
 def get_defaults():
     print 'Enter your preferred settings: (leave blank to accept defaults)\n'
@@ -62,9 +59,9 @@ def get_defaults():
             return get_defaults()
     else:
         oLen = 32
-    print '' #line break for formatting
+    print #line break for formatting
     return {"cost" : cost, "oLen" : oLen}
-    
+
 def getPath():
     try:
         return '%s/visionarypm.conf' % os.path.dirname(os.path.abspath(__file__))
@@ -87,20 +84,16 @@ def getConfig():
 params = {}
 path = getPath()
 
-def main(first_run=True):
+def interactive(first_run=True):
     if first_run == True:
         print '%s\n' % (banner())
         global params
         params, stat = getConfig()
         if stat == 0:
             print '[+] Cost factor: %s\n[+] Password length: %s\n[+] Config file: %s\n' % (params['cost'], params['oLen'], path)
-    try:
-        master_password = getpass('Master password: ')
-    except KeyboardInterrupt:
-        print '\nKeyboard Interrupt.\n\nExiting...'
-        raise SystemExit
+    master_password = getpass('Master password: ')
     if len(master_password) >= 8:
-        print '' #line break for formatting
+        print #line break for formatting
         while True:
             keyword = safe_input('Keyword: ')
             if keyword:
@@ -110,10 +103,13 @@ def main(first_run=True):
                 raise SystemExit
     else:
         print 'Password must be at least 8 characters.\n'
-        main(False) 
- 
-if __name__ == "__main__":
+        main(False)
+
+def main():
     try:
-        main()
+        interactive()
     except KeyboardInterrupt:
         print '\nKeyboard Interrupt.\n\nExiting...'
+
+if __name__ == "__main__":
+    main()
