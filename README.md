@@ -2,8 +2,6 @@
 
 [![PyPI](https://img.shields.io/pypi/dm/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm) [![PyPI](https://img.shields.io/pypi/v/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm) [![PyPI](https://img.shields.io/pypi/l/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm)
 
-![Screenshot](/images/screenshot.png "Screenshot")
-
 Conventional password managers have many flaws. They work by generating passwords, encrypting them with a master password, and then storing or syncing the encrypted passwords somewhere.
 
 There are a few problems with this approach:
@@ -68,6 +66,10 @@ And even specify the CPU/Memory cost parameter and the generated password's leng
 `my_password = visionarypm.generate('master_password', 'keyword', cost=4096, oLen=48)`
 
 The defaults are 2048 and 32, respectively. The maximum password length is 64 characters.
+
+### Screenshot:
+
+![Screenshot](/images/screenshot.png "Screenshot")
 
 ### Troubleshooting:
 
