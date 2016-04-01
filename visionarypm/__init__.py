@@ -109,7 +109,7 @@ def main():
     try:
         interactive()
     except KeyboardInterrupt:
-        print '\nKeyboard Interrupt.\n\nExiting...'
+        print '\n\nKeyboard Interrupt.\n\nExiting...'
 
 if __name__ == "__main__":
     main()
