@@ -19,7 +19,7 @@ There are a few problems with this approach:
 
 ## Installation:
 
-#### *Compatable with Python2 only, and tested on Linux*.
+#### *Compatable with Python2 only. Tested on Linux*.
 
 ### Option 1: pip
 
