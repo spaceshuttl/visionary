@@ -2,6 +2,8 @@
 
 [![PyPI](https://img.shields.io/pypi/dm/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm) [![PyPI](https://img.shields.io/pypi/v/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm) [![PyPI](https://img.shields.io/pypi/l/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm)
 
+![Screenshot](/images/screenshot.png "Screenshot")
+
 Conventional password managers have many flaws. They work by generating passwords, encrypting them with a master password, and then storing or syncing the encrypted passwords somewhere.
 
 There are a few problems with this approach:
@@ -17,11 +19,11 @@ There are a few problems with this approach:
 3. There are thousands of iterations of Scrypt, making brute-forcing infeasible.
 4. No need to sync data, as there's nothing to sync! You can use this script or our API **(coming soon)** from anywhere in the world, and from any device, to generate your passwords.
 
-##Installation:
+## Installation:
 
-####*Compatable with Python2 only, and optimised for Linux*.
+#### *Compatable with Python2 only, and optimised for Linux*.
 
-###Option 1: pip
+### Option 1: pip
 
 **Install using pip in order to get the latest stable release.**
 
@@ -31,7 +33,7 @@ or
 
 `~ >> python -m pip install visionarypm`
 
-###Option 2: git clone
+### Option 2: git clone
 
 **Install using git to be at the bleeding edge. You'll receive the latest commit.**
 
@@ -41,7 +43,7 @@ or
 ~ >> python setup.py install
 ```
 
-##Usage:
+## Usage:
 
 Just run:
 
@@ -67,11 +69,7 @@ And even specify the CPU/Memory cost parameter and the generated password's leng
 
 The defaults are 2048 and 32, respectively. The maximum password length is 64 characters.
 
-###Screenshot:
-
-![Screenshot](https://github.com/libeclipse/visionary/blob/master/images/screenshot.png "Screenshot")
-
-###Troubleshooting:
+### Troubleshooting:
 
 **"I reinstalled Visionary and I want to change my default configuration."**
 
@@ -90,6 +88,10 @@ If you've forgotton your password, then you're pretty much screwed. When it come
 **"The `visionarypm` command doesn't work for me."**
 
 Make sure Python is properly configured and in your PATH. [How2](http://lmgtfy.com/?q=add+python+to+path)
+
+**"Nothing is typed when I try to enter my master password."**
+
+It's a security feature. Your password is being entered, you just can't see it.
 
 [![forthebadge](http://forthebadge.com/images/badges/built-with-swag.svg)](http://forthebadge.com)
 
