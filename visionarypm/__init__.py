@@ -103,7 +103,7 @@ def interactive(first_run=True):
                 raise SystemExit
     else:
         print 'Password must be at least 8 characters.\n'
-        main(False)
+        interactive(False)
 
 def main():
     try:
