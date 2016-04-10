@@ -5,15 +5,6 @@ import pyscrypt
 import json
 import os
 
-def banner():
-    return """
-                          _     _
-                   /\   /(_)___(_) ___  _ __   __ _ _ __ _   _
-                   \ \ / / / __| |/ _ \| '_ \ / _` | '__| | | |
-                    \ V /| \__ \ | (_) | | | | (_| | |  | |_| |
-                     \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
-                                         Password Manager|___/
-    """
 
 def generate(master_password, keyword, cost=2048, oLen=32):
     hashed = pyscrypt.hash (
@@ -26,12 +17,14 @@ def generate(master_password, keyword, cost=2048, oLen=32):
     )
     return hashed.encode('hex')[0:oLen]
 
+
 def safe_input(string):
     try:
         return raw_input(string)
     except EOFError:
         print 'Input unusable.\n'
         return safe_input(string)
+
 
 def get_defaults():
     print 'Enter your preferred settings: (leave blank to accept defaults)\n'
@@ -62,12 +55,14 @@ def get_defaults():
     print #line break for formatting
     return {"cost" : cost, "oLen" : oLen}
 
+
 def getPath():
     try:
         return '%s/visionarypm.conf' % os.path.dirname(os.path.abspath(__file__))
     except:
         print '\nCannot get path. Are you sure you\'re not running Visionary from IDLE?'
         raise SystemExit
+
 
 def getConfig():
     try:
@@ -80,13 +75,22 @@ def getConfig():
         print 'in %s\n' % (path)
         return config, 1
 
+
 # Global parameters
 params = {}
 path = getPath()
 
+
 def interactive(first_run=True):
     if first_run == True:
-        print '%s\n' % (banner())
+        print """
+                          _     _
+                   /\   /(_)___(_) ___  _ __   __ _ _ __ _   _
+                   \ \ / / / __| |/ _ \| '_ \ / _` | '__| | | |
+                    \ V /| \__ \ | (_) | | | | (_| | |  | |_| |
+                     \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
+                                         Password Manager|___/\n
+        """
         global params
         params, stat = getConfig()
         if stat == 0:
@@ -105,11 +109,13 @@ def interactive(first_run=True):
         print 'Password must be at least 8 characters.\n'
         interactive(False)
 
+
 def main():
     try:
         interactive()
     except KeyboardInterrupt:
         print '\n\nKeyboard Interrupt.\n\nExiting...'
+
 
 if __name__ == "__main__":
     main()
