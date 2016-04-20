@@ -45,7 +45,7 @@ or
 
 Just run:
 
-`~ >> visionarypm`
+`~ >> vpm`
 
 in your command line. On your first run, you'll be prompted to enter your default settings (leave blank to accept defaults). A string will be generated that you can save to the specified location. This will remove the need to remember and enter your configuration every time. **Note that different values here will generate different passwords.**
 
@@ -87,7 +87,7 @@ Possible cost factors are `1024, 2048, 4096, 8192, 16384`, and the possible pass
 
 If you've forgotton your password, then you're pretty much screwed. When it comes to keywords, they're usually easy to guess. Most people use the website link or maybe something that reminds them of it.
 
-**"The `visionarypm` command doesn't work for me."**
+**"The `vpm` command doesn't work for me."**
 
 Make sure Python is properly configured and in your PATH. [How2](http://lmgtfy.com/?q=add+python+to+path)
 
