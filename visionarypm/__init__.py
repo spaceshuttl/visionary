@@ -108,6 +108,7 @@ def interactive(first_run=True):
                    \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
                                        Password Manager|___/\n
         """ % (Fore.WHITE, Style.BRIGHT) # Set global default colours.
+        print settings('  Please report any issues at https://github.com/libeclipse/visionary/issues\n')
         global params
         params, stat = getConfig()
         if stat == 0:
