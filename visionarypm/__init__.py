@@ -84,6 +84,16 @@ def getConfig():
         return config, 0
     except IOError:
         config = get_defaults()
+        autosave = safe_input('Do you want to save this config? (Y/n) ').lower()
+        print #line break for formatting
+        if autosave == 'yes' or autosave == 'y':
+            print 'Autosaving configuration...\n'
+            try:
+                with open(path, 'a') as f:
+                    f.write(json.dumps(config))
+                return config, 0
+            except:
+                print err('Autosaving failed! (Permission denied)\n')
         print 'In order to save these settings, place %s' % settings(json.dumps(config))
         print 'in %s\n' % (settings(path))
         return config, 1
@@ -92,10 +102,6 @@ def getConfig():
 # Global parameters
 params = {}
 path = getPath()
-
-
-# Initialise colours for multi-platform support.
-init()
 
 
 def interactive(first_run=True):
@@ -146,4 +152,7 @@ def main():
 
 
 if __name__ == "__main__":
+    # Initialise colours for multi-platform support.
+    init()
+
     main()
