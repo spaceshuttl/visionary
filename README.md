@@ -63,7 +63,9 @@ my_password = visionarypm.generate('master_password', 'keyword')
 
 And even specify the CPU/Memory cost parameter and the generated password's length:
 
-`my_password = visionarypm.generate('master_password', 'keyword', cost=4096, oLen=48)`
+```
+my_password = visionarypm.generate('master_password', 'keyword', cost=4096, oLen=48)
+```
 
 The defaults are 2048 and 32, respectively. The maximum password length is 64 characters.
 
