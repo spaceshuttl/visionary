@@ -10,6 +10,16 @@ import json
 import os
 
 
+# Initialise colours for multi-platform support.
+init()
+
+# Initialise input for multi-version support.
+try:
+    input = raw_input
+except NameError:
+    pass
+
+
 def generate(master_password, keyword, cost=2048, oLen=32):
     hashed = pyscrypt.hash (
         password = master_password.encode(),
@@ -36,7 +46,7 @@ def password(text):
 
 def safe_input(string):
     try:
-        return input(string)
+        return str(input(string))
     except EOFError:
         print(err('Input unusable.\n'))
         return safe_input(string)
@@ -155,13 +165,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # Initialise colours for multi-platform support.
-    init()
-
-    # Initialise input for multi-version support.
-    try:
-        input = raw_input
-    except NameError:
-        pass
-
     main()
