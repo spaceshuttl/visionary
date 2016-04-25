@@ -19,8 +19,6 @@ There are a few problems with this approach:
 
 ## Installation:
 
-#### *Tested on Linux*.
-
 ### Option 1: pip
 
 **Install using pip in order to get the latest stable release.**
