@@ -19,7 +19,7 @@ There are a few problems with this approach:
 
 ## Installation:
 
-#### *Compatable with Python2 only. Tested on Linux*.
+#### *Tested on Linux*.
 
 ### Option 1: pip
 
@@ -73,7 +73,11 @@ The defaults are 2048 and 32, respectively. The maximum password length is 64 ch
 
 ![Screenshot](/images/screenshot.png "Screenshot")
 
-### Troubleshooting:
+### Frequently Asked Questions:
+
+**"Does Visionary support both Python2 and Python3?"**
+
+Yes.
 
 **"I reinstalled Visionary and I want to change my default configuration."**
 
