@@ -99,7 +99,7 @@ def getConfig():
         config = get_defaults()
         autosave = safe_input('Do you want to save this config? (Y/n) ').lower()
         print() #line break for formatting
-        if autosave == 'yes' or autosave == 'y':
+        if autosave == 'yes' or autosave == 'y' or autosave == '':
             print('Autosaving configuration...\n')
             try:
                 with open(path, 'a') as f:
