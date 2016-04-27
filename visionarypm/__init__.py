@@ -4,11 +4,24 @@ from __future__ import print_function, unicode_literals
 import codecs
 
 from colorama import init, Fore, Style
-from getpass import getpass
 import pyscrypt
 import json
 import os
+import sys
 
+if sys.version_info < (3,) and sys.platform.startswith('win'):
+    from getpass import getpass as _getpass
+    def getpass(s):
+        try:
+            return _getpass(str(s))
+        except UnicodeEncodeError:
+            from locale import getpreferredencoding
+            try:
+                return _getpass(s.encode(getpreferredencoding()))
+            except UnicodeEncodeError:
+                return _getpass(b'Password: ')
+else:
+    from getpass import getpass
 
 # Initialise colours for multi-platform support.
 init()
