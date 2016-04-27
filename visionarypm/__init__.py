@@ -128,8 +128,8 @@ def getConfig():
                 return config, 0
             except:
                 print(err('Autosaving failed! (Permission denied)\n'))
-        print('In order to save these settings, place %s' % settings(json.dumps(config)))
-        print('in %s\n' % (settings(path)))
+                print('In order to save these settings, place %s' % settings(json.dumps(config)))
+                print('in %s\n' % (settings(path)))
         return config, 1
 
 
