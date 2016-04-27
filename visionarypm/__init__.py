@@ -9,7 +9,8 @@ import json
 import os
 import sys
 
-# workaround from https://bitbucket.org/ZyX_I/gibiexport/commits/a1241335fe53
+# Fixes getpass bug that affects python27 on windows
+# credit to https://bitbucket.org/ZyX_I/gibiexport/commits/a1241335fe53
 if sys.version_info < (3,) and sys.platform.startswith('win'):
     from getpass import getpass as _getpass
     def getpass(s):
