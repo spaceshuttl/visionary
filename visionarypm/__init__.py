@@ -34,10 +34,16 @@ except NameError:
     pass
 
 
+def make_unicode(s):
+    if sys.version_info < (3,) and type(s) != unicode:
+        return s.decode('utf-8')
+    return s
+
+
 def generate(master_password, keyword, cost=2048, oLen=32):
     hashed = pyscrypt.hash (
-        password = master_password.encode(),
-        salt = keyword.encode(),
+        password = master_password.encode('utf-8'),
+        salt = keyword.encode('utf-8'),
         N = cost,
         r = 1,
         p = 1,
@@ -60,7 +66,7 @@ def password(text):
 
 def safe_input(string):
     try:
-        return str(input(string))
+        return make_unicode(str(input(string)))
     except EOFError:
         print(err('Input unusable.\n'))
         return safe_input(string)
@@ -148,8 +154,8 @@ def interactive(first_run=True):
             print('[+] Cost factor: %s\n[+] Password length: %s\n[+] Config file: %s\n' % (settings(params['cost']),
                                                                                            settings(params['oLen']),
                                                                                            settings(path)))
-    master_password = getpass('Master password: ')
-    master_password_confirm = getpass('Confirm master password: ')
+    master_password = make_unicode(getpass('Master password: '))
+    master_password_confirm = make_unicode(getpass('Confirm master password: '))
     while master_password != master_password_confirm:
         print(err('Passwords don\'t match!\n'))
         master_password = getpass('Master password: ')
