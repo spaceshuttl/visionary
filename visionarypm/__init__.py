@@ -5,11 +5,11 @@ import codecs
 
 from colorama import init, Fore, Style
 import pyperclip
-import pyscrypt
 import os, sys
+import scrypt
 import json
 
-# Fixes getpass bug that affects python27 on windows
+# Fixes getpass bug that affects python 2.7 on windows
 # credit to https://bitbucket.org/ZyX_I/gibiexport/commits/a1241335fe53
 if sys.version_info < (3,) and sys.platform.startswith('win'):
     from getpass import getpass as _getpass
@@ -35,20 +35,11 @@ except NameError:
     pass
 
 
-def make_unicode(s):
-    if sys.version_info < (3,) and type(s) != unicode:
-        return s.decode('utf-8')
-    return s
-
-
-def generate(master_password, keyword, cost=2048, oLen=32):
-    hashed = pyscrypt.hash (
-        password = master_password.encode('utf-8'),
-        salt = keyword.encode('utf-8'),
-        N = cost,
-        r = 1,
-        p = 1,
-        dkLen = 32
+def generate(master_password, keyword, cost=14, oLen=32):
+    hashed = scrypt.hash(
+        password = master_password,
+        salt = keyword,
+        N = 1 << cost,
     )
     return codecs.encode(hashed, 'hex').decode('utf-8')[0:oLen]
 
@@ -67,7 +58,7 @@ def password(text):
 
 def safe_input(string):
     try:
-        return make_unicode(str(input(string)))
+        return str(input(string))
     except EOFError:
         print(err('Input unusable.\n'))
         return safe_input(string)
@@ -75,18 +66,18 @@ def safe_input(string):
 
 def get_defaults():
     print('Enter your preferred settings: (leave blank to accept defaults)\n')
-    cost = safe_input('CPU/memory cost parameter [default=2048]: ')
+    cost = safe_input('Cost factor as a power of 2 [default=14]: ')
     if cost:
         if cost.isdigit():
             cost = int(cost)
-            if (cost & (cost - 1)) or (cost > 16384 or cost < 1024):
-                print(err('Input must be a positive power of 2 between 1024 and 16384.\n'))
+            if cost < 10:
+                print(err('Input must be a positive integer bigger than 10.\n'))
                 return get_defaults()
         else:
-            print(err('Input must be a positive power of 2 between 1024 and 16384.\n'))
+            print(err('Input must be a positive integer bigger than 10.\n'))
             return get_defaults()
     else:
-        cost = 2048
+        cost = 14
     oLen = safe_input('Length of generated passwords [default=32]: ')
     if oLen:
         if oLen.isdigit():
@@ -152,11 +143,11 @@ def interactive(first_run=True):
         global params
         params, stat = getConfig()
         if stat == 0:
-            print('[+] Cost factor: %s\n[+] Password length: %s\n[+] Config file: %s\n' % (settings(params['cost']),
-                                                                                           settings(params['oLen']),
-                                                                                           settings(path)))
-    master_password = make_unicode(getpass('Master password: '))
-    master_password_confirm = make_unicode(getpass('Confirm master password: '))
+            print('[+] Cost factor: 2^%s\n[+] Password length: %s\n[+] Config file: %s\n' % (settings(params['cost']),
+                                                                                             settings(params['oLen']),
+                                                                                             settings(path)))
+    master_password = getpass('Master password: ')
+    master_password_confirm = getpass('Confirm master password: ')
     while master_password != master_password_confirm:
         print(err('Passwords don\'t match!\n'))
         master_password = getpass('Master password: ')
@@ -177,9 +168,11 @@ def interactive(first_run=True):
                 if confirm == 'yes' or confirm == 'y' or confirm == '':
                     try:
                         pyperclip.copy(generated)
-                        print('Copied!\n')
+                        print('\nCopied!\n')
                     except pyperclip.exceptions.PyperclipException:
-                        print(err('Could not copy! Make sure xclip is installed.\n'))
+                        print(err('Could not copy! If you\'re using linux, make sure xclip is installed.\n'))
+                else:
+                    print() # line break for formatting
             else:
                 print(err('\nExiting...'))
                 raise SystemExit
