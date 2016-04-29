@@ -4,10 +4,10 @@ from __future__ import print_function, unicode_literals
 import codecs
 
 from colorama import init, Fore, Style
+import pyperclip
 import pyscrypt
+import os, sys
 import json
-import os
-import sys
 
 # Fixes getpass bug that affects python27 on windows
 # credit to https://bitbucket.org/ZyX_I/gibiexport/commits/a1241335fe53
@@ -166,10 +166,20 @@ def interactive(first_run=True):
         while True:
             keyword = safe_input('Keyword: ')
             if keyword:
-                print('Your password: %s\n' % (password(generate(master_password,
-                                                                 keyword,
-                                                                 params['cost'],
-                                                                 params['oLen']))))
+                # Generate password
+                generated = generate(master_password,
+                                     keyword,
+                                     params['cost'],
+                                     params['oLen'])
+                print('Your password: %s\n' % (password(generated)))
+                # Copy to clipboard
+                confirm = input('Would you like to copy the password to the clipboard? (Y/n) ').lower()
+                if confirm == 'yes' or confirm == 'y' or confirm == '':
+                    try:
+                        pyperclip.copy(generated)
+                        print('Copied!\n')
+                    except pyperclip.exceptions.PyperclipException:
+                        print(err('Could not copy! Make sure xclip is installed.\n'))
             else:
                 print(err('\nExiting...'))
                 raise SystemExit
