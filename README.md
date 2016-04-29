@@ -65,7 +65,7 @@ And even specify the CPU/Memory cost parameter and the generated password's leng
 my_password = visionarypm.generate('master_password', 'keyword', cost=14, oLen=48)
 ```
 
-The defaults are 14 and 32, respectively. The maximum password length is 128 characters.
+The defaults are 14 and 32, respectively. The maximum password length is 64 characters.
 
 ### Screenshot:
 
@@ -85,7 +85,7 @@ You should look inside the folder where Visionary is installed for a file called
 
 If the configuration file has been deleted, then you'll have to guess.
 
-Possible cost factors are powers of 2 larger than 2^10, and the possible password lengths are 16-128 inclusive.
+Possible cost factors are powers of 2 larger than 2^10, and the possible password lengths are 16-64 inclusive.
 
 **"I have forgotton my password and/or keyword! Help!**
 

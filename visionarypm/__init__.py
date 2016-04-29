@@ -21,7 +21,7 @@ if sys.version_info < (3,) and sys.platform.startswith('win'):
             try:
                 return _getpass(s.encode(getpreferredencoding()))
             except UnicodeEncodeError:
-                return _getpass(b'Password: ')
+                return _getpass(b'Master password: ')
 else:
     from getpass import getpass
 
@@ -40,6 +40,7 @@ def generate(master_password, keyword, cost=14, oLen=32):
         password = master_password,
         salt = keyword,
         N = 1 << cost,
+        buflen=32
     )
     return codecs.encode(hashed, 'hex').decode('utf-8')[0:oLen]
 
@@ -82,11 +83,11 @@ def get_defaults():
     if oLen:
         if oLen.isdigit():
             oLen = int(oLen)
-            if oLen > 128 or oLen < 16:
-                print(err('Input must be a positive integer between 16 and 128.\n'))
+            if oLen > 64 or oLen < 16:
+                print(err('Input must be a positive integer between 16 and 64.\n'))
                 return get_defaults()
         else:
-            print(err('Input must be a positive integer between 16 and 128.\n'))
+            print(err('Input must be a positive integer between 16 and 64.\n'))
             return get_defaults()
     else:
         oLen = 32
