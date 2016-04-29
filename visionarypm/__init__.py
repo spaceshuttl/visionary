@@ -82,11 +82,11 @@ def get_defaults():
     if oLen:
         if oLen.isdigit():
             oLen = int(oLen)
-            if oLen > 64 or oLen < 16:
-                print(err('Input must be a positive integer between 16 and 64.\n'))
+            if oLen > 128 or oLen < 16:
+                print(err('Input must be a positive integer between 16 and 128.\n'))
                 return get_defaults()
         else:
-            print(err('Input must be a positive integer between 16 and 64.\n'))
+            print(err('Input must be a positive integer between 16 and 128.\n'))
             return get_defaults()
     else:
         oLen = 32
