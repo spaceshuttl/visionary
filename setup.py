@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='visionarypm',
-      version='2.0.4',
+      version='2.1.1',
       description='A smarter password manager.',
       url='https://github.com/libeclipse/visionary',
       author='libeclipse',
