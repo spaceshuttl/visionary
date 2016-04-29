@@ -59,7 +59,7 @@ import visionarypm
 my_password = visionarypm.generate('master_password', 'keyword')
 ```
 
-And even specify the CPU/Memory cost parameter and the generated password's length:
+And even specify the cost factor and the generated password's length:
 
 ```
 my_password = visionarypm.generate('master_password', 'keyword', cost=14, oLen=48)
