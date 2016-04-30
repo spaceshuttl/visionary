@@ -116,6 +116,7 @@ def getConfig():
         with open(path) as f:
             config = json.loads(f.read().strip())
         if config['oLen'] < 16 or config['oLen'] > 64 or config['cost'] < 10 or config['cost'] > 24:
+            exit_protocol()
             print(err('Invalid config!\n\nPlease delete the configuration file and a new one will be generated on the next run.'))
             raise SystemExit
         return config, 0
