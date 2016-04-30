@@ -78,11 +78,11 @@ def get_defaults():
     if cost:
         if cost.isdigit():
             cost = int(cost)
-            if cost < 10:
-                print(err('Input must be a positive integer bigger than 10.\n'))
+            if cost < 10 or cost > 24:
+                print(err('Input must be a positive integer between 10 and 24.\n'))
                 return get_defaults()
         else:
-            print(err('Input must be a positive integer bigger than 10.\n'))
+            print(err('Input must be a positive integer between 10 and 24.\n'))
             return get_defaults()
     else:
         cost = 14
@@ -115,6 +115,9 @@ def getConfig():
     try:
         with open(path) as f:
             config = json.loads(f.read().strip())
+        if config['oLen'] < 16 or config['oLen'] > 64 or config['cost'] < 10 or config['cost'] > 24:
+            print(err('Invalid config!\n\nPlease delete the configuration file and a new one will be generated on the next run.'))
+            raise SystemExit
         return config, 0
     except IOError:
         config = get_defaults()
