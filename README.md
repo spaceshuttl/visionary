@@ -51,22 +51,6 @@ You will be then be prompted for a master password (minimum 8 characters). This 
 
 A strong password will be generated based on what you entered (depending on your configuration). Visionary will carry on asking for more keywords, so just leave it blank to exit.
 
-It's also possible to import visionarypm into your own scripts:
-
-```
-import visionarypm
-
-my_password = visionarypm.generate('master_password', 'keyword')
-```
-
-And even specify the cost factor and the generated password's length:
-
-```
-my_password = visionarypm.generate('master_password', 'keyword', cost=14, oLen=48)
-```
-
-The defaults are 14 and 32, respectively. The maximum password length is 64 characters.
-
 ### Screenshot:
 
 ![Screenshot](/images/screenshot.png "Screenshot")

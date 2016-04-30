@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 import codecs
 
 from colorama import init, Fore, Style
@@ -8,6 +8,7 @@ import pyperclip
 import os, sys
 import scrypt
 import json
+import math
 
 # Fixes getpass bug that affects python 2.7 on windows
 # credit to https://bitbucket.org/ZyX_I/gibiexport/commits/a1241335fe53
@@ -45,6 +46,40 @@ def generate(master_password, keyword, cost=14, oLen=32):
     return codecs.encode(hashed, 'hex').decode('utf-8')[0:oLen]
 
 
+def generate_readable(generated):
+    confirm = input('Generate readable or conventional password? (R/C) ').lower().strip()
+    if confirm == 'r':
+        with open('%s/words.txt' % path, 'rb') as f:
+        	words = f.read().splitlines()
+
+        dict_len = len(words)
+        entropy_per_word = math.log(dict_len, 2)
+        maximum_desired_entropy = int(math.ceil(params['nwords'] * math.log(dict_len, 2)))
+        num_words = int(math.ceil(maximum_desired_entropy // entropy_per_word))
+
+        # Hash the data and convert to a big integer (converts as Big Endian)
+        hash = codecs.encode(scrypt.hash(str(generated), b'', N=1 << 14), 'hex').decode('utf-8')
+        available_entropy = len(hash) * 4
+        hash = int(hash, 16)
+
+        # Check entropy
+        if (num_words * entropy_per_word) > available_entropy:
+            raise Exception ("The output entropy of the specified hashfunc (%d) is too small." % available_entropy)
+
+        # Generate phrase
+        phrase = []
+
+        for i in range(num_words):
+            remainder = hash % dict_len
+            hash = hash / dict_len
+            phrase.append(words[int(remainder)].strip().decode('utf-8'))
+        return " ".join(phrase).lower().capitalize()
+    if confirm == 'c':
+        return generated
+    print(err('Invalid option!\n'))
+    return generate_readable(generated)
+
+
 def err(text):
     return '%s%s%s' % (Fore.RED, text, Fore.RESET)
 
@@ -73,7 +108,7 @@ def exit_protocol():
 
 
 def get_defaults():
-    print('Enter your preferred settings: (leave blank to accept defaults)\n')
+    print('\nEnter your preferred settings: (leave blank to accept defaults)\n')
     cost = safe_input('Cost factor as a power of 2 [default=14]: ')
     if cost:
         if cost.isdigit():
@@ -98,13 +133,25 @@ def get_defaults():
             return get_defaults()
     else:
         oLen = 32
-    print() #line break for formatting
-    return {"cost" : cost, "oLen" : oLen}
+    nwords = safe_input('Number of words in a readable password [default=6]: ')
+    if nwords:
+        if nwords.isdigit():
+            nwords = int(nwords)
+            if nwords > 16 or oLen < 4:
+                print(err('Input must be a positive integer between 4 and 16.\n'))
+                return get_defaults()
+        else:
+            print(err('Input must be a positive integer between 4 and 16.\n'))
+            return get_defaults()
+    else:
+        nwords = 6
+    print() # line break for formatting
+    return {"cost" : cost, "oLen" : oLen, "nwords" : nwords}
 
 
 def getPath():
     try:
-        return '%s/visionarypm.conf' % os.path.dirname(os.path.abspath(__file__))
+        return os.path.dirname(os.path.abspath(__file__))
     except:
         exit_protocol()
         print(err('ERROR: Cannot get path. Are you sure you\'re not running Visionary from IDLE?'))
@@ -113,9 +160,9 @@ def getPath():
 
 def getConfig():
     try:
-        with open(path) as f:
+        with open('%s/visionarypm.conf' % path) as f:
             config = json.loads(f.read().strip())
-        if config['oLen'] < 16 or config['oLen'] > 64 or config['cost'] < 10 or config['cost'] > 24:
+        if config['oLen'] < 16 or config['oLen'] > 64 or config['cost'] < 10 or config['cost'] > 24 or config['nwords'] > 16 or config['nwords'] < 4:
             exit_protocol()
             print(err('Invalid config!\n\nPlease delete the configuration file and a new one will be generated on the next run.'))
             raise SystemExit
@@ -123,17 +170,16 @@ def getConfig():
     except IOError:
         config = get_defaults()
         autosave = safe_input('Do you want to save this config? (Y/n) ').lower()
-        print() #line break for formatting
         if autosave == 'yes' or autosave == 'y' or autosave == '':
-            print('Autosaving configuration...\n')
+            print('\nAutosaving configuration...')
             try:
-                with open(path, 'a') as f:
+                with open('%s/visionarypm.conf' % path, 'a') as f:
                     f.write(json.dumps(config))
                 return config, 0
             except:
                 print(err('Autosaving failed! (Permission denied)\n'))
                 print('In order to save these settings, place %s' % settings(json.dumps(config)))
-                print('in %s\n' % (settings(path)))
+                print('in %s' % (settings('%s/visionarypm.conf' % path)))
         return config, 1
 
 
@@ -153,13 +199,19 @@ def interactive(first_run=True):
                    \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
                                        Password Manager|___/\n
         """ % (Fore.WHITE, Style.BRIGHT)) # Set global default colours.
-        print(settings('  Please report any issues at https://github.com/libeclipse/visionary/issues\n'))
+        print(settings('  Please report any issues at https://github.com/libeclipse/visionary/issues'))
         global params, copied
         params, stat = getConfig()
         if stat == 0:
-            print('[+] Cost factor: 2^%s\n[+] Password length: %s\n[+] Config file: %s\n' % (settings(params['cost']),
-                                                                                             settings(params['oLen']),
-                                                                                             settings(path)))
+            print("""
+[+] Cost factor: 2^%s
+[+] Length of conventional password: %s
+[+] Words in readable password: %s
+[+] Config file: %s""" % (settings(params['cost']),
+                          settings(params['oLen']),
+                          settings(params['nwords']),
+                          settings('%s/visionarypm.conf' % path)))
+    print() # line break for formatting
     master_password = getpass('Master password: ')
     master_password_confirm = getpass('Confirm master password: ')
     while master_password != master_password_confirm:
@@ -176,9 +228,10 @@ def interactive(first_run=True):
                                      keyword,
                                      params['cost'],
                                      params['oLen'])
+                generated = generate_readable(generated)
                 print('Your password: %s\n' % (password(generated)))
                 # Copy to clipboard
-                confirm = input('Would you like to copy the password to the clipboard? (Y/n) ').lower()
+                confirm = input('Would you like to copy the password to the clipboard? (Y/n) ').lower().strip()
                 if confirm == 'yes' or confirm == 'y' or confirm == '':
                     try:
                         pyperclip.copy(generated)
