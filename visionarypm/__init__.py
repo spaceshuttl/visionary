@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 
-from __future__ import print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 import codecs
+
+from  words import words
 
 from colorama import init, Fore, Style
 import pyperclip
 import os, sys
 import scrypt
 import json
+import math
 
 # Fixes getpass bug that affects python 2.7 on windows
 # credit to https://bitbucket.org/ZyX_I/gibiexport/commits/a1241335fe53
@@ -43,6 +46,36 @@ def generate(master_password, keyword, cost=14, oLen=32):
         buflen=32
     )
     return codecs.encode(hashed, 'hex').decode('utf-8')[0:oLen]
+
+
+def generate_readable(generated):
+    confirm = input('Generate readable or conventional password? (R/C) ').lower().strip()
+    if confirm == 'r':
+        dict_len = len(words)
+        entropy_per_word = math.log(dict_len, 2)
+        num_words = int(math.ceil(100 // entropy_per_word))
+
+        # Hash the data and convert to a big integer (converts as Big Endian)
+        hash = codecs.encode(scrypt.hash(str(generated), b'', N=1 << 14), 'hex')
+        available_entropy = len(hash) * 4
+        hash = int(hash, 16)
+
+        # Check entropy
+        if (num_words * entropy_per_word) > available_entropy:
+            raise Exception ("The output entropy of the specified hashfunc (%d) is too small." % available_entropy)
+
+        # Generate phrase
+        phrase = []
+
+        for i in range(num_words):
+            remainder = hash % dict_len
+            hash = hash / dict_len
+            phrase.append(words[int(remainder)])
+        return " ".join(phrase).lower().capitalize()
+    if confirm == 'c':
+        return generated
+    print(err('Invalid option!\n'))
+    return generate_readable(generated)
 
 
 def err(text):
@@ -176,9 +209,10 @@ def interactive(first_run=True):
                                      keyword,
                                      params['cost'],
                                      params['oLen'])
+                generated = generate_readable(generated)
                 print('Your password: %s\n' % (password(generated)))
                 # Copy to clipboard
-                confirm = input('Would you like to copy the password to the clipboard? (Y/n) ').lower()
+                confirm = input('Would you like to copy the password to the clipboard? (Y/n) ').lower().strip()
                 if confirm == 'yes' or confirm == 'y' or confirm == '':
                     try:
                         pyperclip.copy(generated)
@@ -202,9 +236,9 @@ def main():
     except KeyboardInterrupt:
         exit_protocol()
         print(err('Keyboard Interrupt'))
-    except Exception as e:
-        exit_protocol()
-        print(err('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e)))
+    #except Exception as e:
+    #    exit_protocol()
+    #    print(err('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e)))
 
 
 if __name__ == "__main__":
