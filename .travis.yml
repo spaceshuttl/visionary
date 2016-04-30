@@ -9,7 +9,9 @@ python:
 script: nosetests
 deploy:
   provider: pypi
-  user: ""
-  password:"" 
+  user:
+    secure: ""
+  password:
+    secure: ""
   on:
     tags: true
