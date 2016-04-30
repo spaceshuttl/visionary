@@ -65,6 +65,13 @@ def safe_input(string):
         return safe_input(string)
 
 
+def exit_protocol():
+    if copied:
+        pyperclip.copy('')
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print(err('Exit protocol finished. You are advised to exit the terminal.\n'))
+
+
 def get_defaults():
     print('Enter your preferred settings: (leave blank to accept defaults)\n')
     cost = safe_input('Cost factor as a power of 2 [default=14]: ')
@@ -99,7 +106,8 @@ def getPath():
     try:
         return '%s/visionarypm.conf' % os.path.dirname(os.path.abspath(__file__))
     except:
-        print(err('\nCannot get path. Are you sure you\'re not running Visionary from IDLE?'))
+        exit_protocol()
+        print(err('ERROR: Cannot get path. Are you sure you\'re not running Visionary from IDLE?'))
         raise SystemExit
 
 
@@ -128,6 +136,7 @@ def getConfig():
 # Global parameters
 params = {}
 path = getPath()
+copied = False
 
 
 def interactive(first_run=True):
@@ -141,7 +150,7 @@ def interactive(first_run=True):
                                        Password Manager|___/\n
         """ % (Fore.WHITE, Style.BRIGHT)) # Set global default colours.
         print(settings('  Please report any issues at https://github.com/libeclipse/visionary/issues\n'))
-        global params
+        global params, copied
         params, stat = getConfig()
         if stat == 0:
             print('[+] Cost factor: 2^%s\n[+] Password length: %s\n[+] Config file: %s\n' % (settings(params['cost']),
@@ -169,13 +178,14 @@ def interactive(first_run=True):
                 if confirm == 'yes' or confirm == 'y' or confirm == '':
                     try:
                         pyperclip.copy(generated)
+                        copied = True
                         print('\nCopied!\n')
                     except pyperclip.exceptions.PyperclipException:
                         print(err('Could not copy! If you\'re using linux, make sure xclip is installed.\n'))
                 else:
                     print() # line break for formatting
             else:
-                print(err('\nExiting...'))
+                exit_protocol()
                 raise SystemExit
     else:
         print(err('Password must be at least 8 characters.\n'))
@@ -186,7 +196,11 @@ def main():
     try:
         interactive()
     except KeyboardInterrupt:
-        print(err('\n\nKeyboard Interrupt'))
+        exit_protocol()
+        print(err('Keyboard Interrupt'))
+    except Exception as e:
+        exit_protocol()
+        print(err('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e)))
 
 
 if __name__ == "__main__":
