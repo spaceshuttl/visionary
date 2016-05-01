@@ -100,11 +100,13 @@ def safe_input(string):
         return safe_input(string)
 
 
-def exit_protocol():
+def exit_protocol(msg=''):
     if copied:
         pyperclip.copy('')
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print(err('Exit protocol finished. You are advised to exit the terminal.\n'))
+    if msg:
+        print(err('\n' + msg))
+    print(err('\nExiting securely... You are advised to close this terminal.'))
+    raise SystemExit
 
 
 def get_defaults():
@@ -153,9 +155,7 @@ def getPath():
     try:
         return os.path.dirname(os.path.abspath(__file__))
     except:
-        exit_protocol()
-        print(err('ERROR: Cannot get path. Are you sure you\'re not running Visionary from IDLE?'))
-        raise SystemExit
+        exit_protocol('ERROR: Cannot get path. Are you sure you\'re not running Visionary from IDLE?')
 
 
 def getConfig():
@@ -163,9 +163,7 @@ def getConfig():
         with open('%s/visionarypm.conf' % path) as f:
             config = json.loads(f.read().strip())
         if config['oLen'] < 16 or config['oLen'] > 64 or config['cost'] < 10 or config['cost'] > 24 or config['nwords'] > 16 or config['nwords'] < 4:
-            exit_protocol()
-            print(err('Invalid config!\n\nPlease delete the configuration file and a new one will be generated on the next run.'))
-            raise SystemExit
+            exit_protocol('Invalid config! Please delete the configuration file (%s) and a new one will be generated on the next run.' % (path + '/visionarypm.conf'))
         return config, 0
     except IOError:
         config = get_defaults()
@@ -181,6 +179,8 @@ def getConfig():
                 print('In order to save these settings, place %s' % settings(json.dumps(config)))
                 print('in %s' % (settings('%s/visionarypm.conf' % path)))
         return config, 1
+    except KeyError:
+        exit_protocol('Invalid config! Please delete the configuration file (%s) and a new one will be generated on the next run.' % (path + '/visionarypm.conf'))
 
 
 # Global parameters
@@ -253,11 +253,9 @@ def main():
     try:
         interactive()
     except KeyboardInterrupt:
-        exit_protocol()
-        print(err('Keyboard Interrupt'))
+        exit_protocol('Keyboard Interrupt')
     except Exception as e:
-        exit_protocol()
-        print(err('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e)))
+        exit_protocol('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e))
 
 
 if __name__ == "__main__":

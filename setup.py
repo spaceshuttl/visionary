@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='visionarypm',
-      version='4.0.1',
+      version='4.0.2',
       description='A smarter password manager.',
       url='https://github.com/libeclipse/visionary',
       author='libeclipse',
@@ -11,5 +11,5 @@ setup(name='visionarypm',
       package_data = {'' : ['*.txt']},
       install_requires=["scrypt", "colorama", "pyperclip"],
       entry_points = {'console_scripts': ['vpm = visionarypm:main']},
-      keywords = ['password', 'manager', 'visionary', 'visionarypm'],
+      keywords = ['password', 'manager', 'visionary', 'visionarypm', 'vpm'],
       zip_safe=False)
