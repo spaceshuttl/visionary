@@ -47,37 +47,42 @@ def generate(master_password, keyword, cost=14, oLen=32):
 
 
 def generate_readable(generated):
-    confirm = input('Generate readable or conventional password? (R/C) ').lower().strip()
-    if confirm == 'r':
-        with open('%s/words.txt' % path, 'rb') as f:
-        	words = f.read().splitlines()
+    with open('%s/words.txt' % path, 'rb') as f:
+        words = f.read().splitlines()
+    dict_len = len(words)
+    entropy_per_word = math.log(dict_len, 2)
+    maximum_desired_entropy = int(math.ceil(params['nwords'] * math.log(dict_len, 2)))
+    num_words = int(math.ceil(maximum_desired_entropy // entropy_per_word))
+    hash = codecs.encode(scrypt.hash(str(generated), b'', N=1 << 14), 'hex').decode('utf-8')
+    available_entropy = len(hash) * 4
+    hash = int(hash, 16)
+    if (num_words * entropy_per_word) > available_entropy:
+        raise Exception("The output entropy of the specified hashfunc (%d) is too small." % available_entropy)
+    phrase = []
+    for i in range(num_words):
+        remainder = hash % dict_len
+        hash = hash / dict_len
+        phrase.append(words[int(remainder)].strip().decode('utf-8'))
+    return " ".join(phrase).lower().capitalize()
 
-        dict_len = len(words)
-        entropy_per_word = math.log(dict_len, 2)
-        maximum_desired_entropy = int(math.ceil(params['nwords'] * math.log(dict_len, 2)))
-        num_words = int(math.ceil(maximum_desired_entropy // entropy_per_word))
 
-        # Hash the data and convert to a big integer (converts as Big Endian)
-        hash = codecs.encode(scrypt.hash(str(generated), b'', N=1 << 14), 'hex').decode('utf-8')
-        available_entropy = len(hash) * 4
-        hash = int(hash, 16)
-
-        # Check entropy
-        if (num_words * entropy_per_word) > available_entropy:
-            raise Exception ("The output entropy of the specified hashfunc (%d) is too small." % available_entropy)
-
-        # Generate phrase
-        phrase = []
-
-        for i in range(num_words):
-            remainder = hash % dict_len
-            hash = hash / dict_len
-            phrase.append(words[int(remainder)].strip().decode('utf-8'))
-        return " ".join(phrase).lower().capitalize()
-    if confirm == 'c':
-        return generated
-    print(err('Invalid option!\n'))
-    return generate_readable(generated)
+def copy_to_clipboard(generated):
+    global copied
+    selection = safe_input('Which password would you like to copy? (1/2) ').strip()
+    if selection == '1':
+        password = generated[0]
+    elif selection == '2':
+        password = generated[1]
+    else:
+        print(err('Invalid option. Pick either 1 or 2.\n'))
+        return copy_to_clipboard(generated)
+    try:
+        pyperclip.copy(password)
+        copied = True
+        print('\nCopied!\n')
+        return
+    except pyperclip.exceptions.PyperclipException:
+        print(err('Could not copy! If you\'re using linux, make sure xclip is installed.\n'))
 
 
 def err(text):
@@ -200,7 +205,7 @@ def interactive(first_run=True):
                                        Password Manager|___/\n
         """ % (Fore.WHITE, Style.BRIGHT)) # Set global default colours.
         print(settings('  Please report any issues at https://github.com/libeclipse/visionary/issues'))
-        global params, copied
+        global params
         params, stat = getConfig()
         if stat == 0:
             print("""
@@ -224,21 +229,18 @@ def interactive(first_run=True):
             keyword = safe_input('Keyword: ')
             if keyword:
                 # Generate password
-                generated = generate(master_password,
-                                     keyword,
-                                     params['cost'],
-                                     params['oLen'])
-                generated = generate_readable(generated)
-                print('Your password: %s\n' % (password(generated)))
+                conventional = generate(master_password,
+                                        keyword,
+                                        params['cost'],
+                                        params['oLen'])
+                readable = generate_readable(conventional)
+                generated = [conventional, readable]
+                print('\n[1] Conventional password: %s' % (password(generated[0])))
+                print('[2] Readable password: %s\n' % (password(generated[1])))
                 # Copy to clipboard
-                confirm = input('Would you like to copy the password to the clipboard? (Y/n) ').lower().strip()
+                confirm = safe_input('Would you like to copy a password to the clipboard? (Y/n) ').lower().strip()
                 if confirm == 'yes' or confirm == 'y' or confirm == '':
-                    try:
-                        pyperclip.copy(generated)
-                        copied = True
-                        print('\nCopied!\n')
-                    except pyperclip.exceptions.PyperclipException:
-                        print(err('Could not copy! If you\'re using linux, make sure xclip is installed.\n'))
+                    copy_to_clipboard(generated)
                 else:
                     print() # line break for formatting
             else:
@@ -253,7 +255,7 @@ def main():
     try:
         interactive()
     except KeyboardInterrupt:
-        exit_protocol('Keyboard Interrupt')
+        exit_protocol('\nKeyboard Interrupt')
     except Exception as e:
         exit_protocol('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e))
 
