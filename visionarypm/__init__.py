@@ -253,7 +253,7 @@ def main():
     try:
         interactive()
     except KeyboardInterrupt:
-        exit_protocol('Keyboard Interrupt')
+        exit_protocol('\nKeyboard Interrupt')
     except Exception as e:
         exit_protocol('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e))
 
