@@ -67,15 +67,15 @@ Yes.
 
 You should look inside the folder where Visionary is installed for a file called `visionarypm.conf`. Simply delete it and you should be prompted for a new configuration on the next run.
 
-**"I have forgotton my configuration settings! Help!"**
+**"I have forgotten my configuration settings! Help!"**
 
 If the configuration file has been deleted, then you'll have to guess.
 
 Possible cost factors are powers of 2 larger than 2^10 up to 2^24, and the possible password lengths are 16-64 inclusive.
 
-**"I have forgotton my password and/or keyword! Help!**
+**"I have forgotten my password and/or keyword! Help!**
 
-If you've forgotton your password, then you're pretty much screwed. When it comes to keywords, they're usually easy to guess. Most people use the website link or maybe something that reminds them of it.
+If you've forgotten your password, then you're pretty much screwed. When it comes to keywords, they're usually easy to guess. Most people use the website link or maybe something that reminds them of it.
 
 **"The `vpm` command doesn't work for me."**
 
