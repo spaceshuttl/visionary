@@ -49,7 +49,9 @@ in your command line. On your first run, you'll be prompted to enter your defaul
 
 You will be then be prompted for a master password (minimum 8 characters). This is what protects all of your generated passwords so make it a strong one. Next, a keyword. This can be anything, like 'github.com' or 'facebook' or even 'not_porn' for that special folder.
 
-A strong password will be generated based on what you entered (depending on your configuration). Visionary will carry on asking for more keywords, so just leave it blank to exit.
+Two strong passwords will be generated based on what you entered, a conventional one, and a readable one. You can then optionally copy one to your clipboard. Visionary will carry on asking for more keywords, so just leave it blank to exit.
+
+Upon exit, Visionary clears your clipboard if you copied a password there, and advises you to exit your terminal to prevent scroll-back.
 
 ### Screenshot:
 
