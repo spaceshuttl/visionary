@@ -47,8 +47,10 @@ def generate(master_password, keyword, cost=14, oLen=32):
 
 
 def generate_readable(generated):
-    with open('%s/words.txt' % path, 'rb') as f:
-        words = f.read().splitlines()
+    global words
+    if not words:
+        with open('%s/words.txt' % path, 'rb') as f:
+            words = f.read().splitlines()
     dict_len = len(words)
     entropy_per_word = math.log(dict_len, 2)
     maximum_desired_entropy = int(math.ceil(params['nwords'] * math.log(dict_len, 2)))
@@ -192,6 +194,7 @@ def getConfig():
 params = {}
 path = getPath()
 copied = False
+words = None
 
 
 def interactive(first_run=True):
