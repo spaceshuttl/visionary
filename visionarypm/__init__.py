@@ -250,7 +250,7 @@ def interactive(first_run=True):
                 exit_protocol()
                 raise SystemExit
     else:
-        print(err('Password must be at least 8 characters.\n'))
+        print(err('Password must be at least 8 characters.'))
         interactive(False)
 
 
