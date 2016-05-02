@@ -46,14 +46,16 @@ def generate(master_password, keyword, cost=14, oLen=32):
     return codecs.encode(hashed, 'hex').decode('utf-8')[0:oLen]
 
 
-def generate_readable(generated):
+def generate_readable(generated, desired_words=None):
     global words
     if not words:
         with open('%s/words.txt' % path, 'rb') as f:
             words = f.read().splitlines()
+    if not desired_words:
+        desired_words = params['nwords']
     dict_len = len(words)
     entropy_per_word = math.log(dict_len, 2)
-    maximum_desired_entropy = int(math.ceil(params['nwords'] * math.log(dict_len, 2)))
+    maximum_desired_entropy = int(math.ceil(desired_words * math.log(dict_len, 2)))
     num_words = int(math.ceil(maximum_desired_entropy // entropy_per_word))
     hash = codecs.encode(scrypt.hash(str(generated), b'', N=1 << 14), 'hex').decode('utf-8')
     available_entropy = len(hash) * 4
@@ -221,13 +223,9 @@ def interactive(first_run=True):
                           settings('%s/visionarypm.conf' % path)))
     print() # line break for formatting
     master_password = getpass('Master password: ')
-    master_password_confirm = getpass('Confirm master password: ')
-    while master_password != master_password_confirm:
-        print(err('Passwords don\'t match!\n'))
-        master_password = getpass('Master password: ')
-        master_password_confirm = getpass('Confirm master password: ')
     if len(master_password) >= 8:
-        print() #line break for formatting
+        # Fingerprint confirms to the user that they entered the correct master password.
+        print('Fingerprint: %s\n' % settings(generate_readable(generate(master_password, b'', cost=params['cost']), 4)))
         while True:
             keyword = safe_input('Keyword: ')
             if keyword:
@@ -259,8 +257,8 @@ def main():
         interactive()
     except KeyboardInterrupt:
         exit_protocol('\nKeyboard Interrupt')
-    except Exception as e:
-        exit_protocol('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e))
+    #except Exception as e:
+    #    exit_protocol('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e))
 
 
 if __name__ == "__main__":
