@@ -36,26 +36,24 @@ except NameError:
     pass
 
 
-def generate(master_password, keyword, cost=14, oLen=32):
+def generate(master_password, keyword, cost, oLen=0):
     hashed = scrypt.hash(
         password = master_password,
         salt = keyword,
         N = 1 << cost,
-        buflen=32
+        buflen=64
     )
-    return codecs.encode(hashed, 'hex').decode('utf-8')[0:oLen]
+    if oLen:
+        return codecs.encode(hashed, 'hex').decode('utf-8')[0:oLen]
+    return codecs.encode(hashed, 'hex').decode('utf-8')
 
 
-def generate_readable(generated):
-    global words
-    if not words:
-        with open('%s/words.txt' % path, 'rb') as f:
-            words = f.read().splitlines()
+def generate_readable(master_password, keyword, cost, num_words=None):
+    if not num_words:
+        num_words = params['nwords']
     dict_len = len(words)
     entropy_per_word = math.log(dict_len, 2)
-    maximum_desired_entropy = int(math.ceil(params['nwords'] * math.log(dict_len, 2)))
-    num_words = int(math.ceil(maximum_desired_entropy // entropy_per_word))
-    hash = codecs.encode(scrypt.hash(str(generated), b'', N=1 << 14), 'hex').decode('utf-8')
+    hash = generate(master_password, keyword, cost)
     available_entropy = len(hash) * 4
     hash = int(hash, 16)
     if (num_words * entropy_per_word) > available_entropy:
@@ -63,7 +61,7 @@ def generate_readable(generated):
     phrase = []
     for i in range(num_words):
         remainder = hash % dict_len
-        hash = hash / dict_len
+        hash = hash // dict_len
         phrase.append(words[int(remainder)].strip().decode('utf-8'))
     return " ".join(phrase).lower().capitalize()
 
@@ -194,8 +192,8 @@ def getConfig():
 params = {}
 path = getPath()
 copied = False
-words = None
-
+with open('%s/words.txt' % path, 'rb') as f:
+    words = f.read().splitlines()
 
 def interactive(first_run=True):
     if first_run == True:
@@ -221,13 +219,13 @@ def interactive(first_run=True):
                           settings('%s/visionarypm.conf' % path)))
     print() # line break for formatting
     master_password = getpass('Master password: ')
-    master_password_confirm = getpass('Confirm master password: ')
-    while master_password != master_password_confirm:
-        print(err('Passwords don\'t match!\n'))
-        master_password = getpass('Master password: ')
-        master_password_confirm = getpass('Confirm master password: ')
     if len(master_password) >= 8:
-        print() #line break for formatting
+        # Fingerprint confirms to the user that they entered the correct master password.
+        fingerprint = generate_readable(master_password,
+                                        b'',
+                                        params['cost'],
+                                        4)
+        print('Fingerprint: %s\n' % settings(fingerprint))
         while True:
             keyword = safe_input('Keyword: ')
             if keyword:
@@ -236,7 +234,9 @@ def interactive(first_run=True):
                                         keyword,
                                         params['cost'],
                                         params['oLen'])
-                readable = generate_readable(conventional)
+                readable = generate_readable(master_password,
+                                             keyword,
+                                             params['cost'])
                 generated = [conventional, readable]
                 print('\n[%s] Conventional password: %s' % (settings('1'), password(generated[0])))
                 print('[%s] Readable password: %s\n' % (settings('2'), password(generated[1])))
