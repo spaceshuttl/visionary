@@ -224,7 +224,7 @@ def interactive(first_run=True):
         fingerprint = generate_readable(master_password,
                                         b'',
                                         params['cost'],
-                                        4)
+                                        5)
         print('Fingerprint: %s\n' % settings(fingerprint))
         while True:
             keyword = safe_input('Keyword: ')
