@@ -1,6 +1,6 @@
 # Visionary Password Manager
 
-[![PyPI](https://img.shields.io/pypi/dm/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm) [![PyPI](https://img.shields.io/pypi/v/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm) [![PyPI](https://img.shields.io/pypi/l/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm)
+ [![PyPI](https://img.shields.io/pypi/v/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm) [![PyPI](https://img.shields.io/pypi/l/visionarypm.svg?style=flat-square)](https://pypi.python.org/pypi/visionarypm)
 
 Conventional password managers have a few flaws. They work by generating passwords, encrypting them with a master password, and then storing or syncing the encrypted passwords somewhere.
 
