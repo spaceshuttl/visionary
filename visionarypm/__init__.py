@@ -10,19 +10,10 @@ import scrypt
 import json
 import math
 
-# Fixes getpass bug that affects python 2.7 on windows
-# credit to https://bitbucket.org/ZyX_I/gibiexport/commits/a1241335fe53
-if sys.version_info < (3,) and sys.platform.startswith('win'):
+if sys.version_info < (3,) and os.name == 'nt':
     from getpass import getpass as _getpass
     def getpass(s):
-        try:
-            return _getpass(str(s))
-        except UnicodeEncodeError:
-            from locale import getpreferredencoding
-            try:
-                return _getpass(s.encode(getpreferredencoding()))
-            except UnicodeEncodeError:
-                return _getpass(b'Master password: ')
+        return _getpass(s.encode('utf8'))
 else:
     from getpass import getpass
 
