@@ -10,6 +10,7 @@ import scrypt
 import json
 import math
 
+# Fixes getpass bug affecting Python 2.7 on Windows
 if sys.version_info < (3,) and os.name == 'nt':
     from getpass import getpass as _getpass
     def getpass(s):
@@ -27,16 +28,15 @@ except NameError:
     pass
 
 
-def generate(master_password, keyword, cost, oLen=0):
-    hashed = scrypt.hash(
-        password = master_password,
-        salt = keyword,
-        N = 1 << cost,
-        buflen=64
-    )
+def generate(master_password, keyword, cost, oLen=None):
+    hashed = codecs.encode(scrypt.hash(password = master_password,
+                                       salt = keyword,
+                                       N = 1 << cost,
+                                       buflen=64),
+                           'hex').decode('utf-8')
     if oLen:
-        return codecs.encode(hashed, 'hex').decode('utf-8')[0:oLen]
-    return codecs.encode(hashed, 'hex').decode('utf-8')
+        hashed = hashed[0:oLen]
+    return hashed
 
 
 def generate_readable(master_password, keyword, cost, num_words=None):
@@ -105,18 +105,21 @@ def exit_protocol(msg=''):
     raise SystemExit
 
 
-def get_defaults():
-    print('\nEnter your preferred settings: (leave blank to accept defaults)\n')
-    cost = safe_input('Cost factor as a power of 2 [default=14]: ')
+def get_defaults(first_run=True):
+    if first_run:
+        print('\nEnter your preferred settings: (bigger is better)\n')
+    else:
+        print()  #line break for formatting
+    cost = safe_input('Cost factor [default=14]: 2^')
     if cost:
         if cost.isdigit():
             cost = int(cost)
-            if cost < 10 or cost > 24:
-                print(err('Input must be a positive integer between 10 and 24.\n'))
-                return get_defaults()
+            if cost < 10 or cost > 20:
+                print(err('Input must be a positive integer between 10 and 20.'))
+                return get_defaults(False)
         else:
-            print(err('Input must be a positive integer between 10 and 24.\n'))
-            return get_defaults()
+            print(err('Input must be a positive integer between 10 and 20.'))
+            return get_defaults(False)
     else:
         cost = 14
     oLen = safe_input('Length of generated passwords [default=32]: ')
@@ -124,11 +127,11 @@ def get_defaults():
         if oLen.isdigit():
             oLen = int(oLen)
             if oLen > 64 or oLen < 16:
-                print(err('Input must be a positive integer between 16 and 64.\n'))
-                return get_defaults()
+                print(err('Input must be a positive integer between 16 and 64.'))
+                return get_defaults(False)
         else:
-            print(err('Input must be a positive integer between 16 and 64.\n'))
-            return get_defaults()
+            print(err('Input must be a positive integer between 16 and 64.'))
+            return get_defaults(False)
     else:
         oLen = 32
     nwords = safe_input('Number of words in a readable password [default=6]: ')
@@ -136,14 +139,14 @@ def get_defaults():
         if nwords.isdigit():
             nwords = int(nwords)
             if nwords > 16 or oLen < 4:
-                print(err('Input must be a positive integer between 4 and 16.\n'))
-                return get_defaults()
+                print(err('Input must be a positive integer between 4 and 16.'))
+                return get_defaults(False)
         else:
-            print(err('Input must be a positive integer between 4 and 16.\n'))
-            return get_defaults()
+            print(err('Input must be a positive integer between 4 and 16.'))
+            return get_defaults(False)
     else:
         nwords = 6
-    print() # line break for formatting
+    print()  #line break for formatting
     return {"cost" : cost, "oLen" : oLen, "nwords" : nwords}
 
 
@@ -158,7 +161,7 @@ def getConfig():
     try:
         with open('%s/visionarypm.conf' % path) as f:
             config = json.loads(f.read().strip())
-        if config['oLen'] < 16 or config['oLen'] > 64 or config['cost'] < 10 or config['cost'] > 24 or config['nwords'] > 16 or config['nwords'] < 4:
+        if config['oLen'] < 16 or config['oLen'] > 64 or config['cost'] < 10 or config['cost'] > 20 or config['nwords'] > 16 or config['nwords'] < 4:
             exit_protocol('Invalid config! Please delete the configuration file (%s) and a new one will be generated on the next run.' % (path + '/visionarypm.conf'))
         return config, 0
     except IOError:
@@ -186,6 +189,7 @@ copied = False
 with open('%s/words.txt' % path, 'rb') as f:
     words = f.read().splitlines()
 
+
 def interactive(first_run=True):
     if first_run == True:
         print("""%s%s
@@ -208,7 +212,7 @@ def interactive(first_run=True):
                           settings(params['oLen']),
                           settings(params['nwords']),
                           settings('%s/visionarypm.conf' % path)))
-    print() # line break for formatting
+    print()  #line break for formatting
     master_password = getpass('Master password: ')
     if len(master_password) >= 8:
         # Fingerprint confirms to the user that they entered the correct master password.
@@ -236,7 +240,7 @@ def interactive(first_run=True):
                 if confirm == 'yes' or confirm == 'y' or confirm == '':
                     copy_to_clipboard(generated)
                 else:
-                    print() # line break for formatting
+                    print()  #line break for formatting
             else:
                 exit_protocol()
                 raise SystemExit
