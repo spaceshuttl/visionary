@@ -71,7 +71,7 @@ You should look inside the folder where Visionary is installed for a file called
 
 If the configuration file has been deleted, then you'll have to guess.
 
-Possible cost factors are powers of 2 larger than 2^10 up to 2^24, and the possible password lengths are 16-64 inclusive.
+Possible cost factors are powers of 2 larger than 2^10 up to 2^20, and the possible password lengths are 16-64 inclusive.
 
 **"I have forgotten my password and/or keyword! Help!**
 
