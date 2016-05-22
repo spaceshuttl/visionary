@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='visionarypm',
-      version='5.1.0',
+      version='6.0.0',
       description='A smarter password manager.',
       long_description = 'Manages your passwords without storing anything.',
       url='https://github.com/libeclipse/visionary',
