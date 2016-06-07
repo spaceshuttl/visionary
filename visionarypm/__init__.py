@@ -191,7 +191,7 @@ with open('%s/words.txt' % path, 'rb') as f:
 
 
 def interactive(first_run=True):
-    if first_run == True:
+    if first_run:
         print("""%s%s
                         _     _
                  /\   /(_)___(_) ___  _ __   __ _ _ __ _   _
