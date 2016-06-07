@@ -84,9 +84,3 @@ Make sure Python is properly configured and in your PATH. [How2](http://lmgtfy.c
 **"Nothing is typed when I try to enter my master password."**
 
 It's a security feature. Your password is being entered, you just can't see it.
-
-[![forthebadge](http://forthebadge.com/images/badges/built-with-swag.svg)](http://forthebadge.com)
-
-**Support development by donating ฿itcoins: 1ECLipSrTyitXJbeNBZVRMcRHp94HryZkj**
-
-*"You store your passwords in plaintext?! Na mate, it's double ROT13 encryption."*
