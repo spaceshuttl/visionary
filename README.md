@@ -17,7 +17,7 @@ There are a few problems with this approach:
 3. There are thousands of iterations of Scrypt, making brute-forcing infeasible.
 4. No need to sync data, as there's nothing to sync! You can use this script or our API **(coming soon)** from anywhere in the world, and from any device, to generate your passwords.
 
-## Installation:
+## Installation
 
 ### Option 1: pip
 
@@ -39,7 +39,7 @@ or
 ~ >> python setup.py install
 ```
 
-## Usage:
+## Usage
 
 Just run:
 
@@ -53,11 +53,11 @@ Two strong passwords will be generated based on what you entered, a conventional
 
 Upon exit, Visionary clears your clipboard if you copied a password there, and advises you to exit your terminal to prevent scroll-back.
 
-### Screenshot:
+## Screenshot
 
 ![Screenshot](/images/screenshot.png "Screenshot")
 
-### Frequently Asked Questions:
+## Troubleshooting
 
 **"Does Visionary support both Python2 and Python3?"**
 
