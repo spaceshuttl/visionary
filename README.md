@@ -19,25 +19,11 @@ There are a few problems with this approach:
 
 ## Installation
 
-### Option 1: pip
-
-**Install using pip in order to get the latest stable release.**
-
 `~ >> pip install visionarypm`
 
 or
 
 `~ >> python -m pip install visionarypm`
-
-### Option 2: git clone
-
-**Install using git to be at the bleeding edge. You'll receive the latest commit.**
-
-```
-~ >> git clone https://github.com/libeclipse/visionary.git
-~ >> cd visionary
-~ >> python setup.py install
-```
 
 ## Usage
 
