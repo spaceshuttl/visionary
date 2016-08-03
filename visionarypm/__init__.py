@@ -10,6 +10,7 @@ import scrypt
 import json
 import math
 
+
 # Fixes getpass bug affecting Python 2.7 on Windows
 if sys.version_info < (3,) and os.name == 'nt':
     from getpass import getpass as _getpass
@@ -18,14 +19,90 @@ if sys.version_info < (3,) and os.name == 'nt':
 else:
     from getpass import getpass
 
-# Initialise colours for multi-platform support.
-init()
 
-# Initialise input for multi-version support.
-try:
-    input = raw_input
-except NameError:
-    pass
+def safe_input(string):
+    try:
+        return str(input(string))
+    except EOFError:
+        print(output('Input unusable.\n', Fore.RED))
+        return safe_input(string)
+
+
+def get_defaults(first_run=True):
+    if first_run:
+        print('\nEnter your preferred settings: (bigger is better)\n')
+    else:
+        print()  #line break for formatting
+    cost = safe_input('Cost factor [default=14]: 2^')
+    if cost:
+        if cost.isdigit():
+            cost = int(cost)
+            if cost < 10 or cost > 20:
+                print(output('Input must be a positive integer between 10 and 20.', Fore.RED))
+                return get_defaults(False)
+        else:
+            print(output('Input must be a positive integer between 10 and 20.', Fore.RED))
+            return get_defaults(False)
+    else:
+        cost = 14
+    oLen = safe_input('Length of generated passwords [default=32]: ')
+    if oLen:
+        if oLen.isdigit():
+            oLen = int(oLen)
+            if oLen > 64 or oLen < 16:
+                print(output('Input must be a positive integer between 16 and 64.', Fore.RED))
+                return get_defaults(False)
+        else:
+            print(output('Input must be a positive integer between 16 and 64.', Fore.RED))
+            return get_defaults(False)
+    else:
+        oLen = 32
+    nwords = safe_input('Number of words in a readable password [default=6]: ')
+    if nwords:
+        if nwords.isdigit():
+            nwords = int(nwords)
+            if nwords > 16 or oLen < 4:
+                print(output('Input must be a positive integer between 4 and 16.', Fore.RED))
+                return get_defaults(False)
+        else:
+            print(output('Input must be a positive integer between 4 and 16.', Fore.RED))
+            return get_defaults(False)
+    else:
+        nwords = 6
+    print()  #line break for formatting
+    return {"cost" : cost, "oLen" : oLen, "nwords" : nwords}
+
+
+def getPath():
+    try:
+        return os.path.dirname(os.path.abspath(__file__))
+    except:
+        exit_protocol('ERROR: Cannot get path. Are you sure you\'re not running Visionary from IDLE?')
+
+
+def getConfig():
+    try:
+        with open('%s/visionarypm.conf' % path) as f:
+            config = json.loads(f.read().strip())
+        if config['oLen'] < 16 or config['oLen'] > 64 or config['cost'] < 10 or config['cost'] > 20 or config['nwords'] > 16 or config['nwords'] < 4:
+            exit_protocol('Invalid config! Please delete the configuration file (%s) and a new one will be generated on the next run.' % (path + '/visionarypm.conf'))
+        return config, 0
+    except IOError:
+        config = get_defaults()
+        autosave = safe_input('Do you want to save this config? (Y/n) ').lower()
+        if autosave == 'yes' or autosave == 'y' or autosave == '':
+            print('\nAutosaving configuration...')
+            try:
+                with open('%s/visionarypm.conf' % path, 'a') as f:
+                    f.write(json.dumps(config))
+                return config, 0
+            except:
+                print(output('Autosaving failed! (Permission denied)\n', Fore.RED))
+                print('In order to save these settings, place %s' % output(json.dumps(config), Fore.YELLOW))
+                print('in %s' % (output('%s/visionarypm.conf' % path, Fore.YELLOW)))
+        return config, 1
+    except (KeyError, json.decoder.JSONDecodeError):
+        exit_protocol('Invalid config! Please delete the configuration file (%s) and a new one will be generated on the next run.' % (path + '/visionarypm.conf'))
 
 
 def generate(master_password, keyword, cost, oLen=None):
@@ -65,7 +142,7 @@ def copy_to_clipboard(generated):
     elif selection == '2':
         password = generated[1]
     else:
-        print(err('Invalid option. Pick either 1 or 2.\n'))
+        print(output('Invalid option. Pick either 1 or 2.\n', Fore.RED))
         return copy_to_clipboard(generated)
     try:
         pyperclip.copy(password)
@@ -73,121 +150,20 @@ def copy_to_clipboard(generated):
         print('\nCopied!\n')
         return
     except pyperclip.exceptions.PyperclipException:
-        print(err('Could not copy! If you\'re using linux, make sure xclip is installed.\n'))
+        print(output('Could not copy! If you\'re using linux, make sure xclip is installed.\n', Fore.RED))
 
 
-def err(text):
-    return '%s%s%s' % (Fore.RED, text, Fore.RESET)
-
-
-def settings(text):
-    return '%s%s%s' % (Fore.YELLOW, text, Fore.RESET)
-
-
-def password(text):
-    return '%s%s%s' % (Fore.CYAN, text, Fore.RESET)
-
-
-def safe_input(string):
-    try:
-        return str(input(string))
-    except EOFError:
-        print(err('Input unusable.\n'))
-        return safe_input(string)
+def output(text, color):
+    return '%s%s%s' % (color, text, Fore.RESET)
 
 
 def exit_protocol(msg=''):
     if copied:
         pyperclip.copy('')
     if msg:
-        print(err('\n' + msg))
-    print(err('\nExiting securely... You are advised to close this terminal.'))
+        print(output('\n%s' % msg, Fore.RED))
+    print(output('\nExiting securely... You are advised to close this terminal.', Fore.RED))
     raise SystemExit
-
-
-def get_defaults(first_run=True):
-    if first_run:
-        print('\nEnter your preferred settings: (bigger is better)\n')
-    else:
-        print()  #line break for formatting
-    cost = safe_input('Cost factor [default=14]: 2^')
-    if cost:
-        if cost.isdigit():
-            cost = int(cost)
-            if cost < 10 or cost > 20:
-                print(err('Input must be a positive integer between 10 and 20.'))
-                return get_defaults(False)
-        else:
-            print(err('Input must be a positive integer between 10 and 20.'))
-            return get_defaults(False)
-    else:
-        cost = 14
-    oLen = safe_input('Length of generated passwords [default=32]: ')
-    if oLen:
-        if oLen.isdigit():
-            oLen = int(oLen)
-            if oLen > 64 or oLen < 16:
-                print(err('Input must be a positive integer between 16 and 64.'))
-                return get_defaults(False)
-        else:
-            print(err('Input must be a positive integer between 16 and 64.'))
-            return get_defaults(False)
-    else:
-        oLen = 32
-    nwords = safe_input('Number of words in a readable password [default=6]: ')
-    if nwords:
-        if nwords.isdigit():
-            nwords = int(nwords)
-            if nwords > 16 or oLen < 4:
-                print(err('Input must be a positive integer between 4 and 16.'))
-                return get_defaults(False)
-        else:
-            print(err('Input must be a positive integer between 4 and 16.'))
-            return get_defaults(False)
-    else:
-        nwords = 6
-    print()  #line break for formatting
-    return {"cost" : cost, "oLen" : oLen, "nwords" : nwords}
-
-
-def getPath():
-    try:
-        return os.path.dirname(os.path.abspath(__file__))
-    except:
-        exit_protocol('ERROR: Cannot get path. Are you sure you\'re not running Visionary from IDLE?')
-
-
-def getConfig():
-    try:
-        with open('%s/visionarypm.conf' % path) as f:
-            config = json.loads(f.read().strip())
-        if config['oLen'] < 16 or config['oLen'] > 64 or config['cost'] < 10 or config['cost'] > 20 or config['nwords'] > 16 or config['nwords'] < 4:
-            exit_protocol('Invalid config! Please delete the configuration file (%s) and a new one will be generated on the next run.' % (path + '/visionarypm.conf'))
-        return config, 0
-    except IOError:
-        config = get_defaults()
-        autosave = safe_input('Do you want to save this config? (Y/n) ').lower()
-        if autosave == 'yes' or autosave == 'y' or autosave == '':
-            print('\nAutosaving configuration...')
-            try:
-                with open('%s/visionarypm.conf' % path, 'a') as f:
-                    f.write(json.dumps(config))
-                return config, 0
-            except:
-                print(err('Autosaving failed! (Permission denied)\n'))
-                print('In order to save these settings, place %s' % settings(json.dumps(config)))
-                print('in %s' % (settings('%s/visionarypm.conf' % path)))
-        return config, 1
-    except KeyError:
-        exit_protocol('Invalid config! Please delete the configuration file (%s) and a new one will be generated on the next run.' % (path + '/visionarypm.conf'))
-
-
-# Global parameters
-params = {}
-path = getPath()
-copied = False
-with open('%s/words.txt' % path, 'rb') as f:
-    words = f.read().splitlines()
 
 
 def interactive(first_run=True):
@@ -200,7 +176,7 @@ def interactive(first_run=True):
                    \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
                                        Password Manager|___/\n
         """ % (Fore.WHITE, Style.BRIGHT)) # Set global default colours.
-        print(settings('  Please report any issues at https://github.com/libeclipse/visionary/issues'))
+        print(output('  Please report any issues at https://github.com/libeclipse/visionary/issues', Fore.YELLOW))
         global params
         params, stat = getConfig()
         if stat == 0:
@@ -208,10 +184,10 @@ def interactive(first_run=True):
 [+] Cost factor: 2^%s
 [+] Length of conventional password: %s
 [+] Words in readable password: %s
-[+] Config file: %s""" % (settings(params['cost']),
-                          settings(params['oLen']),
-                          settings(params['nwords']),
-                          settings('%s/visionarypm.conf' % path)))
+[+] Config file: %s""" % (output(params['cost'], Fore.YELLOW),
+                          output(params['oLen'], Fore.YELLOW),
+                          output(params['nwords'], Fore.YELLOW),
+                          output('%s/visionarypm.conf' % path, Fore.YELLOW)))
     print()  #line break for formatting
     master_password = getpass('Master password: ')
     if len(master_password) >= 8:
@@ -220,7 +196,7 @@ def interactive(first_run=True):
                                         b'',
                                         params['cost'],
                                         5)
-        print('Fingerprint: %s\n' % settings(fingerprint))
+        print('Fingerprint: %s\n' % output(fingerprint, Fore.YELLOW))
         while True:
             keyword = safe_input('Keyword: ')
             if keyword:
@@ -233,8 +209,8 @@ def interactive(first_run=True):
                                              keyword,
                                              params['cost'])
                 generated = [conventional, readable]
-                print('\n[%s] Conventional password: %s' % (settings('1'), password(generated[0])))
-                print('[%s] Readable password: %s\n' % (settings('2'), password(generated[1])))
+                print('\n[%s] Conventional password: %s' % (output('1', Fore.YELLOW), output(generated[0], Fore.CYAN)))
+                print('[%s] Readable password: %s\n' % (output('2', Fore.YELLOW), output(generated[1], Fore.CYAN)))
                 # Copy to clipboard
                 confirm = safe_input('Would you like to copy a password to the clipboard? (Y/n) ').lower().strip()
                 if confirm == 'yes' or confirm == 'y' or confirm == '':
@@ -245,8 +221,25 @@ def interactive(first_run=True):
                 exit_protocol()
                 raise SystemExit
     else:
-        print(err('Password must be at least 8 characters.'))
+        print(output('Password must be at least 8 characters.', Fore.RED))
         interactive(False)
+
+
+# Initialise colours for multi-platform support.
+init()
+
+# Initialise input for multi-version support.
+try:
+    input = raw_input
+except NameError:
+    pass
+
+# Global parameters
+params = {}
+path = getPath()
+copied = False
+with open('%s/words.txt' % path, 'rb') as f:
+    words = f.read().splitlines()
 
 
 def main():
@@ -255,7 +248,7 @@ def main():
     except KeyboardInterrupt:
         exit_protocol('\nKeyboard Interrupt')
     except Exception as e:
-        exit_protocol('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % str(e))
+        exit_protocol('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % repr(e))
 
 
 if __name__ == "__main__":
