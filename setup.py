@@ -1,13 +1,13 @@
 from setuptools import setup
 
 setup(name='visionarypm',
-      version='6.1.0',
+      version='6.1.1',
       description='A smarter password manager.',
       long_description = 'Manages your passwords without storing anything.',
       url='https://github.com/libeclipse/visionary',
       author='libeclipse',
       author_email='libeclipse@gmail.com',
-      license='MIT',
+      license='CC BY 4.0',
       packages=['visionarypm'],
       package_data = {'' : ['*.txt']},
       install_requires=["scrypt", "colorama", "pyperclip"],
