@@ -4,9 +4,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from colorama import init, Fore, Style
 import pyperclip, requests, scrypt
-import os, sys, codecs, json, math
+import codecs, json, math, string
+import os, sys
 
-__version__ = '6.3.1'
+__version__ = '6.3.2'
 
 def check_for_update():
     latest_info = requests.get('https://pypi.python.org/pypi/visionarypm/json')
@@ -285,8 +286,8 @@ def main():
         interactive()
     except KeyboardInterrupt:
         exit('\nKeyboard Interrupt')
-    except Exception as e:
-        exit('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % repr(e))
+    #except Exception as e:
+    #    exit('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % repr(e))
 
 
 if __name__ == "__main__":
