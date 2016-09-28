@@ -7,7 +7,18 @@ import pyperclip, requests, scrypt
 import codecs, json, math, string
 import os, sys
 
-__version__ = '6.3.2'
+
+# Fixes getpass bug affecting Python 2.7 on Windows
+if sys.version_info < (3,) and os.name == 'nt':
+    from getpass import getpass as _getpass
+    def getpass(s):
+        return _getpass(s.encode('utf8'))
+else:
+    from getpass import getpass
+
+
+__version__ = '6.3.3'
+
 
 def check_for_update():
     latest_info = requests.get('https://pypi.python.org/pypi/visionarypm/json')
@@ -19,14 +30,6 @@ def check_for_update():
         if latest_version != __version__:
             print(color('\nUpgrade [%s --> %s] available; install with `pip install -U visionarypm`' % (__version__, latest_version), Fore.RED))
     return
-
-# Fixes getpass bug affecting Python 2.7 on Windows
-if sys.version_info < (3,) and os.name == 'nt':
-    from getpass import getpass as _getpass
-    def getpass(s):
-        return _getpass(s.encode('utf8'))
-else:
-    from getpass import getpass
 
 
 def safe_input(string):
