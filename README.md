@@ -55,9 +55,13 @@ You should look inside the folder where Visionary is installed for a file called
 
 **"I have forgotten my configuration settings! Help!"**
 
-If the configuration file has been deleted, then you'll have to guess.
+If the configuration file has been deleted, then you'll have to guess. The possible configuration options are listed in the table below:
 
-Possible cost factors are powers of 2 larger than 2^10 up to 2^20, and the possible password lengths are 16-64 inclusive.
+| Configuration field            | Possible values (inclusive) |
+| :----------------------------: | :-------------------------: |
+| Cost factor                    | 2^10 - 2^20                 |
+| Password lengths               | 16 - 64                     |
+| Words in readable password     | 4 - 16                      |
 
 **"I have forgotten my password and/or keyword! Help!**
 
