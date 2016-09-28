@@ -3,10 +3,21 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from colorama import init, Fore, Style
-import codecs, string, json
-import pyperclip, scrypt
-import os, sys, math
+import pyperclip, requests, scrypt
+import os, sys, codecs, json, math
 
+__version__ = '6.3.0'
+
+def check_for_update():
+    latest_info = requests.get('https://pypi.python.org/pypi/visionarypm/json')
+    if latest_info.status_code == 200:
+        try:
+            latest_version = json.loads(latest_info.text)['info']['version']
+        except ValueError: # PyPi returned something weird
+            pass
+        if latest_version != __version__:
+            print(color('\nUpgrade [%s --> %s] available; install with `pip install -U visionarypm`' % (__version__, latest_version), Fore.RED))
+    return
 
 # Fixes getpass bug affecting Python 2.7 on Windows
 if sys.version_info < (3,) and os.name == 'nt':
@@ -148,7 +159,7 @@ def generate(master_password, keyword, cost, oLen=None, num_words=None):
         # There's a little possibility that the required chars aren't there
         for i, req in enumerate(required):
             if not set(req).intersection(res):
-                res[i] = req[len(keyword) % len(req)] 
+                res[i] = req[len(keyword) % len(req)]
         return ''.join(res)
 
     def readable_password():
@@ -212,6 +223,9 @@ def interactive(first_run=True):
                                        Password Manager|___/\n
         """ % (Fore.WHITE, Style.BRIGHT)) # Set global default colours.
         print(color('  Please report any issues at https://github.com/libeclipse/visionary/issues', Fore.YELLOW))
+        # Check for update
+        check_for_update()
+        # Grab configuration
         global params
         params, saved = getConfig()
         print("""
