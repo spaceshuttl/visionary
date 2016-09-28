@@ -6,7 +6,7 @@ from colorama import init, Fore, Style
 import pyperclip, requests, scrypt
 import os, sys, codecs, json, math
 
-__version__ = '6.3.0'
+__version__ = '6.3.1'
 
 def check_for_update():
     latest_info = requests.get('https://pypi.python.org/pypi/visionarypm/json')
