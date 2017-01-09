@@ -17,11 +17,14 @@ else:
     from getpass import getpass
 
 
-__version__ = '6.3.3'
+__version__ = '6.3.4'
 
 
 def check_for_update():
-    latest_info = requests.get('https://pypi.python.org/pypi/visionarypm/json')
+    try:
+        latest_info = requests.get('https://pypi.python.org/pypi/visionarypm/json')
+    except:
+        return
     if latest_info.status_code == 200:
         try:
             latest_version = json.loads(latest_info.text)['info']['version']
@@ -226,7 +229,7 @@ def interactive(first_run=True):
                    \_/ |_|___/_|\___/|_| |_|\__,_|_|   \__, |
                                        Password Manager|___/\n
         """ % (Fore.WHITE, Style.BRIGHT)) # Set global default colours.
-        print(color('  Please report any issues at https://github.com/libeclipse/visionary/issues', Fore.YELLOW))
+        print(color('  Please report any issues at https://github.com/spaceshuttl/visionary/issues', Fore.YELLOW))
         # Check for update
         check_for_update()
         # Grab configuration
@@ -289,8 +292,8 @@ def main():
         interactive()
     except KeyboardInterrupt:
         exit('\nKeyboard Interrupt')
-    #except Exception as e:
-    #    exit('ERROR: %s\n\nPlease report this error at https://github.com/libeclipse/visionary/issues' % repr(e))
+    except Exception as e:
+        exit('ERROR: %s\n\nPlease report this error at https://github.com/spaceshuttl/visionary/issues' % repr(e))
 
 
 if __name__ == "__main__":
