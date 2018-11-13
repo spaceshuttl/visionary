@@ -1,7 +1,5 @@
 # Visionary Password Manager
 
- [![PyPI](https://img.shields.io/pypi/v/visionarypm.svg)](https://pypi.python.org/pypi/visionarypm) [![PyPI](https://img.shields.io/pypi/l/visionarypm.svg)](https://creativecommons.org/licenses/by/4.0/) [![Dependency Status](https://dependencyci.com/github/spaceshuttl/visionary/badge)](https://dependencyci.com/github/spaceshuttl/visionary)
-
 Conventional password managers have a few flaws. They work by generating passwords, encrypting them with a master password, and then storing or syncing the encrypted passwords somewhere.
 
 There are a few problems with this approach:
@@ -15,7 +13,9 @@ There are a few problems with this approach:
 1. Your passwords are generated on-the-fly based on a pure algorithm. This means that the only thing that would make you lose your data is you forgetting your master password.
 2. Nothing is stored so there's nothing to steal.
 3. There are thousands of iterations of Scrypt, making brute-forcing infeasible.
-4. No need to sync data, as there's nothing to sync! You can use this script or our API **(coming soon)** from anywhere in the world, and from any device, to generate your passwords.
+4. No need to sync data, as there's nothing to sync!
+
+**This is an experimental project and should be treated as such.**
 
 ## Installation
 
