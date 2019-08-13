@@ -15,7 +15,7 @@ There are a few problems with this approach:
 3. There are thousands of iterations of Scrypt, making brute-forcing infeasible.
 4. No need to sync data, as there's nothing to sync!
 
-**This is an experimental project and should be treated as such.**
+**This project is an experimental proof-of-concept. It is now frozen and will only be updated with bug-fixes.**
 
 ## Installation
 
