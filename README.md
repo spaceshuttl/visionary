@@ -19,11 +19,7 @@ There are a few problems with this approach:
 
 ## Installation
 
-`~ >> pip install visionarypm`
-
-or
-
-`~ >> python -m pip install visionarypm`
+`~ >> pip install --user visionarypm`
 
 ## Usage
 
